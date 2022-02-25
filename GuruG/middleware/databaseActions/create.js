@@ -2,20 +2,6 @@ const db = require("../../startup/database");
 const sql = require("mssql");
 const uniqid = require("uniqid");
 
-let tables = [
-  { name: "ResProfile", path: "basic" },
-  { name: "ResContacts", path: "contacts" },
-  { name: "ResDrugInfo", path: "drug" },
-  { name: "ResEducationInfo", path: "education" },
-  { name: "ResEmployment", path: "employment" },
-  { name: "ResNotes", path: "notes" },
-  { name: "ResFamily", path: "family" },
-  { name: "ResFinance", path: "finance" },
-  { name: "ResLegalCases", path: "legal" },
-  { name: "ResMedicalInfo", path: "medical" },
-  { name: "ResMedicationInfo", path: "medication" },
-  { name: "ResAdmission", path: "admission" },
-];
 
 module.exports = (model) => {
   return async (req, res, next) => {
