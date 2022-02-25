@@ -1,2 +1,2 @@
-# mhrestrak_backend
-Backend for the MH ResTrak application
+# GuruG_backend
+Backend for the GuruG application
