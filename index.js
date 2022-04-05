@@ -1,9 +1,10 @@
 const winston = require("winston");
 const express = require("express");
+const mongoose = require("mongoose");
 const app = express();
 
 //-------refactored code in startup folder----------------
-require("./startup/logging")();
+// require("./startup/logging")();
 require("./startup/routes")(app);
 require("./startup/database")();
 require("./startup/config")();

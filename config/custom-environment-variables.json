@@ -1,0 +1,5 @@
+{
+    "jwtPrivateKey": "gurug_jwtPrivateKey",
+    "db": "gurug_db",
+    "sendgridApiKey" : "gurug_sendgridKey"
+  }
