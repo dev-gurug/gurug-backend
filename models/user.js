@@ -19,7 +19,6 @@ const userSchema = mongoose.Schema({
   email: {
     type: String,
     required: true,
-    unique: true,
     minlength: 5,
     maxlength: 255,
   },
@@ -36,6 +35,12 @@ const userSchema = mongoose.Schema({
     type: String,
     maxlength: 1000,
   },
+  about : {
+    type: String,
+    maxlength: 1000,
+  },
+  tags : Array,
+
   country : {
     type: String,
     minlength: 2,
@@ -45,6 +50,19 @@ const userSchema = mongoose.Schema({
     type: String,
     minlength: 3,
     maxlength: 255,
+  },
+  city : {
+    type: String,
+    minlength: 3,
+    maxlength: 255,
+  },
+  zip : {
+    type: String,
+    minlength: 2,
+    maxlength: 255,
+  },
+  image : {
+    type: String,
   },
   password: {
     type: String,
@@ -82,11 +100,16 @@ function validate(req) {
     firstName: Joi.string().required().max(50).min(3),
     lastName: Joi.string().required().max(50).min(3),
     email: Joi.string().required().max(255).email().min(5),
-    phone: Joi.string().max(50).min(5).optional(),
+    phone: Joi.string().max(50).min(5).optional().allow(""),
     ministryInfo : Joi.string().max(1000).optional().allow(""),
     bio : Joi.string().max(1000).optional().allow(""),
-    country : Joi.string().max(255).min(2).optional(),
-    state : Joi.string().max(255).min(3).optional(),
+    tags : Joi.array().optional(),
+    about : Joi.string().max(1000).optional().allow(""),
+    country : Joi.string().max(255).min(2).optional().allow(""),
+    state : Joi.string().max(255).min(3).optional().allow(""),
+    city : Joi.string().max(255).min(3).optional().allow(""),
+    zip : Joi.string().max(255).min(2).optional().allow(""),
+    image : Joi.string().optional().allow(""),
     password: Joi.string().required().max(255),
     isGuru : Joi.boolean(),
     isAdmin : Joi.boolean(),
@@ -98,4 +121,5 @@ function validate(req) {
 }
 
 exports.User = User;
+exports.userSchema = userSchema;
 exports.validate = validate;
