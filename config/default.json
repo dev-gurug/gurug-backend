@@ -1,5 +1,5 @@
 {
     "jwtPrivateKey": "1234",
     "db": "mongodb://localhost/gurug",
-    "sendgridApiKey" : "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"
+    "sendgridApiKey" : ""
 }
