@@ -13,8 +13,20 @@ router.get("/:id", async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
-  const gyan = await Gyan.find();
-  if (!gyan) return res.status(404).send("Gyan does not exist...");
+    let gyan;
+  if(req.query.search){
+        let tags = req.query.search.split(' ')
+        tags = tags.map((tag) => tag.trim())
+        // let query = tags.map((tag) => ({"title" : {$regex : tag}}))
+        let query = tags.map((tag) => ({"title" : new RegExp(tag, "i")}))
+        query.push({tags : {$in : tags}})
+
+        gyan = await Gyan.find({$or : query});
+        if (!gyan) return res.status(404).send("Gyan does not exist...");
+  }else{
+      gyan = await Gyan.find();
+      if (!gyan) return res.status(404).send("Gyan does not exist...");
+  }
   res.send(gyan);
 });
 
@@ -30,3 +42,10 @@ router.post("/", [auth, admin, validate(validateGyan)], async (req, res) => {
 });
 
 module.exports = router;
+
+// User.find( { $or:[ {'_id':objId}, {'name':param}, {'nickname':param} ]}, 
+//   function(err,docs){
+//     if(!err) res.send(docs);
+// });
+
+// PersonModel.find({favouriteFoods: {"$in": ["sushi", "hotdog"]}})

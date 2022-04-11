@@ -16,7 +16,12 @@ const { Posts, validatePost } = require("../../models/resources/posts_model");
   router.get("/user", [auth],async (req, res) => {
     console.log(req.user._id)
     const post = await Posts.find({user : req.user._id});
-    console.log(post)
+    if (!post) return res.status(404).send("Posts do not exist...");
+    res.send(post);
+  });
+
+  router.get("/guru/:id", [auth],async (req, res) => {
+    const post = await Posts.find({user : req.params.id});
     if (!post) return res.status(404).send("Posts do not exist...");
     res.send(post);
   });

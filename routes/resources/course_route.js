@@ -1,0 +1,80 @@
+const express = require("express");
+const _ = require("lodash");
+const router = express.Router();
+const auth = require("../../middleware/auth");
+const guru = require("../../middleware/guru");
+const validate = require("../../middleware/validate");
+const {
+  Course,
+  validateCourse,
+} = require("../../models/resources/course_model");
+
+router.get("/", async (req, res) => {
+  const course = await Course.find();
+  if (!course) return res.status(404).send("Course does not exist...");
+  res.send(course);
+});
+
+//   router.get("/user", [auth],async (req, res) => {
+//     console.log(req.user._id)
+//     const post = await Posts.find({user : req.user._id});
+//     if (!post) return res.status(404).send("Posts do not exist...");
+//     res.send(post);
+//   });
+
+router.get("/find", async (req, res) => {
+  let course;
+  if (req.query.search) {
+    let tags = req.query.search.split(" ");
+    tags = tags.map((tag) => tag.trim());
+    // let query = tags.map((tag) => ({"title" : {$regex : tag}}))
+    let query = tags.map((tag) => ({ title: new RegExp(tag, "i") }));
+    query.push({ tags: { $in: tags } });
+
+    course = await Course.find({ $or: query });
+    if (!course) return res.status(404).send("Course does not exist...");
+  } else {
+    course = await Course.find();
+    if (!course) return res.status(404).send("Course does not exist...");
+  }
+  res.send(course);
+});
+
+router.get("/guru/:id", [auth], async (req, res) => {
+  console.log(req.params.id);
+  const courses = await Course.find({ user: req.params.id });
+  if (!courses) return res.status(404).send("Courses do not exist...");
+  res.send(courses);
+});
+
+router.get("/:id", async (req, res) => {
+  const course = await Course.findById(req.params.id);
+  if (!course) return res.status(404).send("Course does not exist...");
+  res.send(course);
+});
+
+router.post("/", [auth, guru, validate(validateCourse)], async (req, res) => {
+  console.log("SDfsdf");
+  let course = Course(
+    _.pick(req.body, [
+      "title",
+      "duration",
+      "requirements",
+      "description",
+      "tags",
+      "modules",
+      "image",
+      "createdDate",
+      "user",
+    ])
+  );
+
+  try {
+    course = await course.save();
+    res.send({ ..._.pick(course, ["_id", "title"]) });
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+});
+
+module.exports = router;

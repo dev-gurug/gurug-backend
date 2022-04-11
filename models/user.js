@@ -84,7 +84,8 @@ userSchema.methods.generateAuthToken = function () {
       lastName: this.lastName, 
       phone: this.phone, 
       isAdmin: this.isAdmin, 
-      isGuru : this.isGuru, 
+      isGuru : this.isGuru,
+      image : this.image,
       isSubAdmin : this.isSubAdmin, 
       isKeyUser : this.isKeyUser, 
       isUser : this.isUser
