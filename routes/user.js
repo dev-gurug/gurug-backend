@@ -11,6 +11,19 @@ router.get("/me", auth, async (req, res) => {
   res.send(user);
 });
 
+router.get("/findEmail", async (req, res) => {
+  console.log(req.query)
+  let email = req.query.email
+  if(!email) res.status(404).send("Enter an Email...");
+
+  let user = await User.findOne({ email: req.body.email });
+  if (user) res
+      .status(400)
+      .send("Email already registered. Please Use another email.");
+
+  res.send();
+});
+
 router.get("/all-gurus", auth, async (req, res) => {
   let searchQuery = {isGuru : true}
   if(req.query.search){
