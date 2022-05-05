@@ -8,7 +8,8 @@ const GyanSchema = mongoose.Schema({
     maxlength: 50,
   },
   tags: [String],
-  videoLink : String,
+  mediaLink : String,
+  mediaType : String,
   image : String,
   body: {
     type: String,
@@ -29,7 +30,8 @@ function validateGyan(req) {
     tags: Joi.array(),
     body: Joi.string().required(),
     image : Joi.string(),
-    videoLink : Joi.string().optional().allow(""),
+    mediaLink : Joi.string().optional().allow(""),
+    mediaType : Joi.string().optional().allow(""),
     createdDate : Joi.date().required(),
   });
   return schema.validate(req);

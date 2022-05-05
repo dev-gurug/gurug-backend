@@ -31,7 +31,7 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/", [auth, admin, validate(validateGyan)], async (req, res) => {
-  let gyan = Gyan(_.pick(req.body, ["title", "tags", "body","videoLink", "image", "createdDate"]));
+  let gyan = Gyan(_.pick(req.body, ["title", "tags", "body","mediaLink","mediaType", "image", "createdDate"]));
 
   try {
     gyan = await gyan.save();

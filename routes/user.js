@@ -16,10 +16,23 @@ router.get("/findEmail", async (req, res) => {
   let email = req.query.email
   if(!email) res.status(404).send("Enter an Email...");
 
-  let user = await User.findOne({ email: req.body.email });
+  let user = await User.findOne({ email });
   if (user) res
       .status(400)
       .send("Email already registered. Please Use another email.");
+
+  res.send();
+});
+
+router.get("/findPhone", async (req, res) => {
+  console.log(req.query)
+  let phone = req.query.phone
+  if(!phone) res.status(404).send("Enter an PhoneNumber...");
+
+  let user = await User.findOne({ phone });
+  if (user) res
+      .status(400)
+      .send("Phone Number already registered. Please Use another Phone Number.");
 
   res.send();
 });

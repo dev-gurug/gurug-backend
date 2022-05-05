@@ -8,6 +8,10 @@ const {
   Course,
   validateCourse,
 } = require("../../models/resources/course_model");
+const {
+  CourseProgress,
+  validateCourseProgress,
+} = require("../../models/resources/courseProgress_model");
 
 router.get("/", async (req, res) => {
   const course = await Course.find();
@@ -47,34 +51,63 @@ router.get("/guru/:id", [auth], async (req, res) => {
   res.send(courses);
 });
 
-router.get("/:id", async (req, res) => {
-  const course = await Course.findById(req.params.id);
-  if (!course) return res.status(404).send("Course does not exist...");
-  res.send(course);
+router.get("/myCourses", [auth], async (req, res) => {
+  const allProgress = await CourseProgress.find({ user: req.user._id });
+  console.log("asd")
+  if (!allProgress) return res.status(404).send("No Courses Started...");
+  res.send(allProgress);
 });
 
-router.post("/", [auth, guru, validate(validateCourse)], async (req, res) => {
-  console.log("SDfsdf");
-  let course = Course(
-    _.pick(req.body, [
-      "title",
-      "duration",
-      "requirements",
-      "description",
-      "tags",
-      "modules",
-      "image",
-      "createdDate",
-      "user",
-    ])
-  );
-
-  try {
-    course = await course.save();
-    res.send({ ..._.pick(course, ["_id", "title"]) });
-  } catch (error) {
-    res.status(400).send(error.message);
-  }
+router.get("/user-progress/:id", [auth], async (req, res) => {
+  const courses = await CourseProgress.find({ user: req.user._id, courseId : req.params.id });
+  if (!courses) return res.status(404).send("Courses do not exist...");
+  if (courses.length === 0) return res.status(404).send("Courses do not exist...");
+  res.send(courses);
 });
+
+router.post("/create-progress", [auth, validate(validateCourseProgress)], async (req, res) => {
+  let courseProgress = CourseProgress(
+    _.pick(req.body, ["title","courseId", "progress", "createdDate", "user"])
+    );
+    console.log("1")
+    try {
+      courseProgress = await courseProgress.save();
+      console.log("2")
+      res.send({ ..._.pick(courseProgress, ["_id", "courseId", "user", "title"]) });
+      console.log("3")
+    } catch (error) {
+      res.status(400).send(error.message);
+    }
+  });
+
+  router.get("/:id", async (req, res) => {
+    const course = await Course.findById(req.params.id);
+    if (!course) return res.status(404).send("Course does not exist...");
+    res.send(course);
+  });
+  
+  router.post("/", [auth, guru, validate(validateCourse)], async (req, res) => {
+    console.log("SDfsdf");
+    let course = Course(
+      _.pick(req.body, [
+        "title",
+        "duration",
+        "requirements",
+        "description",
+        "tags",
+        "modules",
+        "image",
+        "createdDate",
+        "user",
+      ])
+    );
+  
+    try {
+      course = await course.save();
+      res.send({ ..._.pick(course, ["_id", "title"]) });
+    } catch (error) {
+      res.status(400).send(error.message);
+    }
+  });
 
 module.exports = router;
