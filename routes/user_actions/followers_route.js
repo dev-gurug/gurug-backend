@@ -23,7 +23,7 @@ router.get("/follows", async (req, res) => {
     res.send(followers);
   });
 
-  router.get("/my-gurus", [auth, guru],async (req, res) => {
+  router.get("/my-gurus", [auth],async (req, res) => {
     const followers = await Followers.find({sourceId : req.user._id, targetRole : "guru"});
     if (!followers) return res.status(404).send("No followers...");
     res.send(followers);
