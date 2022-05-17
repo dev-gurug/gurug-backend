@@ -44,6 +44,7 @@ router.post("/", [auth, admin, validate(validateInvitation)], async (req, res) =
       template_id: emailTemplateId,
       variables: {
         Weblink: link + invitation._id,
+        name : invitationObject.firstName + " " + invitationObject.lastName
       },
     };
 
