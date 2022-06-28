@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 const router = express.Router();
 const auth = require("../middleware/auth");
 const validate = require("../middleware/validate");
+const { sendPhoneVerification , verifyPhoneCode } = require("../services/twillio");
 
 router.get("/me", auth, async (req, res) => {
   const user = await User.findById(req.user._id).select("-password");
@@ -37,6 +38,25 @@ router.get("/findPhone", async (req, res) => {
   res.send();
 });
 
+router.get("/forgotPassword", async (req, res) => {
+  console.log(req.query)
+  let phone = req.query.phone
+  phone = "+"+phone.trim()
+  if(!phone) return res.status(404).send("Enter an PhoneNumber...");
+  console.log(phone)
+  let user = await User.findOne({ phone });
+  if (!user) return res
+      .status(400)
+      .send("Phone Number not found/Registered. Please check Phone Number.");
+  console.log(user._id, "User ID")
+  try {
+    let verification = await sendPhoneVerification(phone);
+    res.send(verification);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+});
+
 router.get("/all-gurus", auth, async (req, res) => {
   let searchQuery = {isGuru : true}
   if(req.query.search){
@@ -58,6 +78,29 @@ router.get("/gurus/:id", auth, async (req, res) => {
     const user = await User.findById(req.params.id).select("-password");
     if (!user) return res.status(404).send("Guru does not exist...");
     res.send(user);
+});
+
+router.put("/regeneratePassword", async (req, res) => {
+    console.log(req.query)
+    let phone = req.body.phone
+    let pass = req.body.pass
+    if(!phone) return res.status(404).send("Enter an PhoneNumber...");
+
+    let user = await User.findOne({ phone });
+    if (!user) return res
+        .status(400)
+        .send("Phone Number not found/Registered. Please check Phone Number.");
+
+    const salt = await bcrypt.genSalt(10);
+    console.log(user);
+    pass = await bcrypt.hash(pass, salt);
+
+    try {
+      await User.findByIdAndUpdate(user._id, {$set : {password : pass}}, {new : true})
+      res.send()
+    } catch (error) {
+      res.status(400).send(error.message);
+    }
 });
 
 router.post("/", async (req, res) => {
@@ -101,7 +144,7 @@ router.post("/", async (req, res) => {
       ])
     );
   }
-
+  
   const salt = await bcrypt.genSalt(10);
   console.log(user);
   user.password = await bcrypt.hash(user.password, salt);

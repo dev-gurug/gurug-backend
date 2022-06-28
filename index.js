@@ -18,8 +18,8 @@ require("./startup/prod")(app);
 
 // throw new Error("something failed during startup.");
 
-const port = process.env.PORT || 3100;
-
+const port = process.env.PORT || 3200;
+// const hostName = "192.168.0.104"
 if (process.env.NODE_ENV !== "test") {
   app.listen(port, () => winston.info(`Listning on port ${port}...`));
   console.log("not in test");
