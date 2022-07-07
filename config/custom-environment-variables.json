@@ -1,9 +1,9 @@
 {
-    "jwtPrivateKey": "gurug_jwtPrivateKey",
-    "db": "gurug_db",
-    "sendgridApiKey" : "gurug_sendgridKey",
-    "TWILIO_ACCOUNT_SID" : "gurug_TWILIO_ACCOUNT_SID",
-    "TWILIO_AUTH_TOKEN" : "guru_TWILIO_AUTH_TOKEN",
-    "Email_verification_serviceId" : "guru_Email_verification_serviceId", 
-    "Phone_verification_serviceId" : "guru_Phone_verification_serviceId" 
+  "jwtPrivateKey": "gurug_jwtPrivateKey",
+  "db": "gurug_db",
+  "sendgridApiKey" : "gurug_sendgridKey",
+  "TWILIO_ACCOUNT_SID" : "gurug_TWILIO_ACCOUNT_SID",
+  "TWILIO_AUTH_TOKEN" : "guru_TWILIO_AUTH_TOKEN",
+  "Email_verification_serviceId" : "guru_Email_verification_serviceId", 
+  "Phone_verification_serviceId" : "guru_Phone_verification_serviceId" 
   }
