@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
 const { Schema } = require("mongoose");
-const { number, date } = require("joi");
+const { number, date, boolean } = require("joi");
 
 const EventsSchema = mongoose.Schema({
   title: {
@@ -27,11 +27,15 @@ const EventsSchema = mongoose.Schema({
   date : String,
   eventImage : String,
   eventType : String,
-  isUserEvent : String,
-  isAdmin : String,
-  isApproved : String
+  userEvent : Boolean,
+  isAdmin : Boolean,
+  pendingEvent : Boolean,
+  adminEvent : Boolean,
+  
 
 });
+
+
 
 
 const Events = mongoose.model("Events", EventsSchema);
