@@ -23,16 +23,15 @@ const EventsSchema = mongoose.Schema({
   nameOfOrganizer : String,
   numberOfAttendees : String,
   state:String,
-  time : String,
   date : String,
   eventImage : String,
   eventType : String,
   userEvent : Boolean,
   isAdmin : Boolean,
-  pendingEvent : Boolean,
   adminEvent : Boolean,
-  
-
+  eventEndTime : String,
+  eventStartTime : String,
+  eventStatus : String
 });
 
 

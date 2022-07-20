@@ -28,8 +28,8 @@ router.get("/:id", async (req, res) => {
 });
 
 router.post("/", [auth], async (req, res) => {
-
-  let events = Events(_.pick(req.body, ["title", "tags", "guruEvent", "user", "location", "city", "state", "isPrivate", "time", "date", "eventImage", "eventType", "nameOfOrganizer", "numberOfAttendees", "linkOfEvent", , "adminEvent", "userEvent", "pendingEvent", "description"]));
+  console.log(req);
+  let events = Events(_.pick(req.body, ["title", "tags", "guruEvent", "user", "location", "city", "state", "isPrivate", "date", "eventImage", "eventType", "nameOfOrganizer", "numberOfAttendees", "linkOfEvent", "adminEvent", "userEvent", "eventStatus", "description","eventEndTime","eventStartTime"]));
 
   try {
     events = await events.save();
@@ -39,10 +39,26 @@ router.post("/", [auth], async (req, res) => {
   }
 });
 
-router.post("/:id", [auth], async (req, res) => {
+router.post("/:id/:eventStatus", [auth], async (req, res) => {
   console.log(req.params.id);
-  const event = await Events.findByIdAndUpdate(req.params.id, { pendingEvent: false },
+  const event = await Events.findByIdAndUpdate(req.params.id, { eventStatus: req.params.eventStatus },
     { new: true , useFindAndModify: false, strict: false });
+  if (!event) return res.status(404).send("Event does not exist...");
+  res.send(event);
+});
+
+router.put("/:id", [auth], async (req, res) => {
+  console.log(req.params);
+  console.log(req.body);
+   const event = await Events.findByIdAndUpdate(req.params.id, { eventStatus: req.body.eventStatus, tags : req.body.tags, description : req.body.description, date : req.body.date },
+     { new: true , useFindAndModify: false, strict: false });
+   if (!event) return res.status(404).send("Event does not exist...");
+   res.send(event);
+});
+
+router.delete("/:id/", [auth], async (req, res) => {
+  console.log(req.params.id);
+  const event = await Events.deleteOne({id : req.params.id});
   if (!event) return res.status(404).send("Event does not exist...");
   res.send(event);
 });
