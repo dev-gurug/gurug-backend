@@ -15,6 +15,11 @@ router.get("/post/:id",[auth], async (req, res) => {
     // console.log(req.user._id)
     const post = await GuruForumPost.findById(req.params.id);
     if (!post) return res.status(404).send("Forum Post does not exist...");
+
+    let userId = post.user
+    let user = await User.findById(userId)
+
+    post.user = _.pick(user, ["_id", "image", "firstName", "lastName", "isUser", "isGuru", "isAdmin"])
     res.send(post);
 });
 
@@ -72,6 +77,21 @@ router.put("/post/incrementViews/:id",[auth], async (req, res) => {
 
     try{
         post = await GuruForumPost.findByIdAndUpdate(post._id, {$set: {views : post.views+1}}, {new : true})
+        res.send(post)
+    } catch (error) {
+        res.status(400).send(error.message);
+    }
+
+    res.send(post);
+});
+
+router.put("/post/incrementComments/:id",[auth], async (req, res) => {
+    // console.log(req.user._id)
+    const post = await GuruForumPost.findById(req.params.id);
+    if (!post) return res.status(404).send("Forum Post does not exist...");
+
+    try{
+        post = await GuruForumPost.findByIdAndUpdate(post._id, {$set: {comments : post.comments+1}}, {new : true})
         res.send(post)
     } catch (error) {
         res.status(400).send(error.message);
