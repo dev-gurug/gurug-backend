@@ -73,6 +73,13 @@ router.get("/all-gurus", auth, async (req, res) => {
   res.send(users);
 });
 
+router.get("/all-keyUsers", auth, async (req, res) => {
+  console.log("in route all-key");
+  let users = await User.find({isKeyUser: true});
+  if (!users) return res.status(404).send("No Key User exist...");
+  res.send(users);
+});
+
 router.get("/gurus/:id", auth, async (req, res) => {
     console.log("sd")
     const user = await User.findById(req.params.id).select("-password");
@@ -141,6 +148,21 @@ router.post("/", async (req, res) => {
         "phone",
         "password",
         "isUser",
+      ])
+    );
+  }
+
+  if (req.body.isKeyUser) {
+    // user = User(_.pick(req.body, ["firstName", "lastName", "email", "password", "isGuru", "isSubAdmin", "isAdmin"]));
+    console.log("is key user");
+    user = User(
+      _.pick(req.body, [
+        "firstName",
+        "lastName",
+        "email",
+        "phone",
+        "password",
+        "isKeyUser",
       ])
     );
   }

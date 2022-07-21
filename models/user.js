@@ -114,7 +114,7 @@ function validate(req) {
     isGuru : Joi.boolean(),
     isAdmin : Joi.boolean(),
     isSubAdmin : Joi.boolean(),
-    isKeyUSer : Joi.boolean(),
+    isKeyUser : Joi.boolean(),
     isUser : Joi.boolean(),
   });
   return schema.validate(req);
