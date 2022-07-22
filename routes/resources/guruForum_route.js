@@ -25,7 +25,6 @@ router.get("/post/:id",[auth], async (req, res) => {
 
 router.get("/getAllPosts/:id",[auth], async (req, res) => {
     // console.log(req.user._id)
-
     const posts = await GuruForumPost.find({guru: req.params.id});
     if(posts.length === 0 ) return res.send([])
 
@@ -54,6 +53,7 @@ router.get("/getAllPosts/:id",[auth], async (req, res) => {
         post.user = user1
         return post
     })
+
     posts.sort((post, nPost) => nPost.createdDate - post.createdDate)
     res.send(posts);
 });

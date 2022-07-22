@@ -39,7 +39,7 @@ const userSchema = mongoose.Schema({
     maxlength: 1000,
   },
   tags : Array,
-
+  badges : Array,
   country : {
     type: String,
     minlength: 2,
@@ -104,6 +104,7 @@ function validate(req) {
     ministryInfo : Joi.string().max(1000).optional().allow(""),
     bio : Joi.string().max(1000).optional().allow(""),
     tags : Joi.array().optional(),
+    badges : Joi.array().optional(),
     about : Joi.string().max(1000).optional().allow(""),
     country : Joi.string().max(255).min(2).optional().allow(""),
     state : Joi.string().max(255).min(3).optional().allow(""),

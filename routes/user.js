@@ -5,10 +5,28 @@ const bcrypt = require("bcrypt");
 const router = express.Router();
 const auth = require("../middleware/auth");
 const validate = require("../middleware/validate");
+const {Badges}  = require("../models/resources/badge_model")
 const { sendPhoneVerification , verifyPhoneCode } = require("../services/twillio");
 
 router.get("/me", auth, async (req, res) => {
   const user = await User.findById(req.user._id).select("-password");
+  if(user.badges){
+        const badges = await Badges.find({_id: {"$in": user.badges}})
+        if(user.badges.length > 0){
+            let cBadges = []
+            badges.forEach((badge) =>{
+                user.badges.forEach((userBadge) =>{
+                    if(userBadge === badge._id){
+                        cBadges.push(badge)
+                    }
+                })
+            })
+            user.badges = cBadges
+        }else{
+          user.badges = []
+        }
+    }
+
   res.send(user);
 });
 
@@ -75,7 +93,7 @@ router.get("/all-gurus", auth, async (req, res) => {
 
 router.get("/all-keyUsers", auth, async (req, res) => {
   console.log("in route all-key");
-  let users = await User.find({isKeyUser: true});
+  let users = await User.find({isKeyUser: true}).select("-password");
   if (!users) return res.status(404).send("No Key User exist...");
   res.send(users);
 });
@@ -204,6 +222,7 @@ router.put("/:id", [auth,validate(UserValidation)], async (req, res) => {
     phone: req.body.phone,
     ministryInfo: req.body.ministryInfo,
     tags: req.body.tags,
+    badges : req.body.badges,
     bio: req.body.bio,
     country: req.body.country,
     state: req.body.state,
