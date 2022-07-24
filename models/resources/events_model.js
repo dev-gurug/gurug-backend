@@ -31,7 +31,8 @@ const EventsSchema = mongoose.Schema({
   adminEvent : Boolean,
   eventEndTime : String,
   eventStartTime : String,
-  eventStatus : String
+  eventStatus : String,
+  notes : String
 });
 
 

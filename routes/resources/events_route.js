@@ -1,4 +1,5 @@
 const express = require("express");
+const { date } = require("joi");
 const _ = require("lodash");
 const router = express.Router();
 const auth = require("../../middleware/auth");
@@ -47,10 +48,12 @@ router.post("/:id/:eventStatus", [auth], async (req, res) => {
   res.send(event);
 });
 
+
 router.put("/:id", [auth], async (req, res) => {
   console.log(req.params);
   console.log(req.body);
-   const event = await Events.findByIdAndUpdate(req.params.id, { eventStatus: req.body.eventStatus, tags : req.body.tags, description : req.body.description, date : req.body.date },
+   const event = await Events.findByIdAndUpdate(req.params.id, { eventStatus: req.body.eventStatus, tags : req.body.tags, description : req.body.description, date : req.body.date, notes : req.body.notes, eventStartTime : req.body.startTime, eventEndTime : req.body.endTime, isPrivate : req.body.isPrivate, 
+  title : req.body.title,city : req.body.city, state : req.body.state, location : req.body.location, eventType : req.body.eventType , eventImage : req.body.eventImage, linkOfEvent : req.body.linkOfEvent , nameOfOrganizer : req.body.nameOfOrganizer, numberOfAttendees : req.body.numberOfAttendees, tags : req.body.tags},
      { new: true , useFindAndModify: false, strict: false });
    if (!event) return res.status(404).send("Event does not exist...");
    res.send(event);
@@ -58,7 +61,7 @@ router.put("/:id", [auth], async (req, res) => {
 
 router.delete("/:id/", [auth], async (req, res) => {
   console.log(req.params.id);
-  const event = await Events.deleteOne({id : req.params.id});
+  const event = await Events.findByIdAndDelete(req.params.id,{ new: false , useFindAndModify: false, strict: false });
   if (!event) return res.status(404).send("Event does not exist...");
   res.send(event);
 });
