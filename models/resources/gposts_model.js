@@ -16,7 +16,8 @@ const GPostSchema = mongoose.Schema({
   groupId : String,
   likes: [String],
   views: Number,
-  userId : String
+  userId : String,
+  comments: Number,
 });
 
 const GPost = mongoose.model("GPost", GPostSchema);

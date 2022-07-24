@@ -71,6 +71,21 @@ router.delete("/:id/", [auth], async (req, res) => {
   res.send(event);
 });
 
+router.put("/post/incrementComments/:id",[auth], async (req, res) => {
+  // console.log(req.user._id)
+  const post = await GPost.findById(req.params.id);
+  if (!post) return res.status(404).send("Forum Post does not exist...");
+
+  try{
+      post = await GPost.findByIdAndUpdate(post._id, {$set: {comments : post.comments+1}}, {new : true})
+      res.send(post)
+  } catch (error) {
+      res.status(400).send(error.message);
+  }
+
+  res.send(post);
+});
+
 // router.get("/:id", async (req, res) => {
 //   const group = await Group.findById(req.params.id);
 //   if (!group) return res.status(404).send("Post does not exist...");
