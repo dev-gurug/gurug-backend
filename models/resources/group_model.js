@@ -19,10 +19,11 @@ const GroupSchema = mongoose.Schema({
   description : String,
   showPhone : Boolean,
   phoneNo : String,
-  createrName : String,
+  creatorName : String,
   memberCount : Number,
   usersAssociated : [Object],
-  groupManagers : [String]
+  groupManagers : [String],
+  date : Date
 });
 
 
