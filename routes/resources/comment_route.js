@@ -4,6 +4,7 @@ const router = express.Router();
 const auth = require("../../middleware/auth");
 // const guru = require("../../middleware/guru");
 const validate = require("../../middleware/validate");
+const { Badges } = require("../../models/resources/badge_model");
 const { Comments, validateComment } = require("../../models/resources/comment_model");
 const {User} = require("../../models/user")
 
@@ -23,11 +24,29 @@ const {User} = require("../../models/user")
     
     let userIds = comments.map((comment) => comment.user)
     let users = await User.find({_id : {$in : userIds}})
+    let badges = await Badges.find()
 
-    users = users.map((user) => ({_id : user._id, image : user.image, firstName : user.firstName, lastName : user.lastName, isUser : user.isUser, isGuru : user.isGuru, isAdmin : user.isAdmin}))
+    users = users.map((user) => ({_id : user._id, image : user.image, firstName : user.firstName, lastName : user.lastName, isUser : user.isUser, isGuru : user.isGuru, isAdmin : user.isAdmin, badges : user.badges}))
    
+    // Get badges and replace with badge ID
+    
+    let usersWithbadges = [...users]
+    users.forEach((user,i) =>{
+      if(user.badges?.length > 0){
+          let tempBadges = []
+          user.badges.forEach((uBadgeId) =>{
+            badges.forEach((badge) =>{
+              if(badge._id.toString() === uBadgeId.toString()){
+                tempBadges.push(badge)
+              }
+            })
+          })
+          usersWithbadges[i].badges = tempBadges
+      }
+    })
+    
     comments.forEach((comment, i) =>{
-        users.forEach((user) =>{
+        usersWithbadges.forEach((user) =>{
             if(user._id.toString() === comment.user.toString()) {
                 comments[i].user = user
             }
