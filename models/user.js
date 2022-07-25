@@ -39,7 +39,6 @@ const userSchema = mongoose.Schema({
     maxlength: 1000,
   },
   tags : Array,
-  badges : Array,
   country : {
     type: String,
     minlength: 2,
@@ -60,6 +59,7 @@ const userSchema = mongoose.Schema({
     minlength: 2,
     maxlength: 255,
   },
+  badges : Array,
   image : {
     type: String,
   },

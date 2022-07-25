@@ -5,6 +5,7 @@ const auth = require("../../middleware/auth");
 // const guru = require("../../middleware/guru");
 const validate = require("../../middleware/validate");
 const { Comments, validateComment } = require("../../models/resources/comment_model");
+const {User} = require("../../models/user")
 
 
 // router.get("/", async (req, res) => {
@@ -23,14 +24,14 @@ const { Comments, validateComment } = require("../../models/resources/comment_mo
     let userIds = comments.map((comment) => comment.user)
     let users = await User.find({_id : {$in : userIds}})
 
-    users = _.pick(users, ["_id", "image", "firstName", "lastName", "isUser", "isGuru", "isAdmin"])
-    comments = comments.map((comment) =>{
-        let user1
+    users = users.map((user) => ({_id : user._id, image : user.image, firstName : user.firstName, lastName : user.lastName, isUser : user.isUser, isGuru : user.isGuru, isAdmin : user.isAdmin}))
+   
+    comments.forEach((comment, i) =>{
         users.forEach((user) =>{
-            if(user._id === comment.user)user1 = user
-        }) 
-        comment.user = user1
-        return comment
+            if(user._id.toString() === comment.user.toString()) {
+                comments[i].user = user
+            }
+        })
     })
 
     res.send(comments);
@@ -50,7 +51,7 @@ const { Comments, validateComment } = require("../../models/resources/comment_mo
   });
   
 router.post("/", [auth, validate(validateComment)], async (req, res) => {
-  let comment = Posts(_.pick(req.body, ["comment", "createdDate", "user", "parent"]));
+  let comment = Comments(_.pick(req.body, ["comment", "createdDate", "user", "parent"]));
 
   try {
     comment = await comment.save();

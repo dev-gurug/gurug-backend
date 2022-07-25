@@ -7,6 +7,8 @@ const events = require("./resources/events_route")
 const guruForum = require("./resources/guruForum_route")
 const group = require("./resources/groups_route")
 const gpost = require("./resources/gposts_route")
+const comment = require("./resources/comment_route")
+const badge = require("./resources/badge_route")
 
 router.use("/gyan",gyan);
 router.use("/posts", posts);
@@ -15,4 +17,7 @@ router.use("/events", events);
 router.use("/guru-forum", guruForum)
 router.use("/gposts", gpost);
 router.use("/group", group);
+router.use("/comments", comment);
+router.use("/badges", badge)
+
 module.exports = router;

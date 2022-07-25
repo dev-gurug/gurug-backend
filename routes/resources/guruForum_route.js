@@ -25,7 +25,7 @@ router.get("/post/:id",[auth], async (req, res) => {
 
 router.get("/getAllPosts/:id",[auth], async (req, res) => {
     // console.log(req.user._id)
-    const posts = await GuruForumPost.find({guru: req.params.id});
+    let posts = await GuruForumPost.find({guru: req.params.id});
     if(posts.length === 0 ) return res.send([])
 
     if(req.query.limit){
@@ -44,14 +44,13 @@ router.get("/getAllPosts/:id",[auth], async (req, res) => {
     let userIds = posts.map((post) => post.user)
     let users = await User.find({_id : {$in : userIds}})
 
-    users = _.pick(users, ["_id", "image", "firstName", "lastName", "isUser", "isGuru", "isAdmin"])
-    posts = posts.map((post) =>{
-        let user1
+    users = users.map((user) => ({_id : user._id, image : user.image, firstName : user.firstName, lastName : user.lastName, isUser : user.isUser, isGuru : user.isGuru, isAdmin : user.isAdmin}))
+    posts.forEach((post, i) =>{
         users.forEach((user) =>{
-            if(user._id === post.user)user1 = user
-        }) 
-        post.user = user1
-        return post
+            if(user._id.toString() === post.user.toString()) {
+                posts[i].user = user
+            }
+        })
     })
 
     posts.sort((post, nPost) => nPost.createdDate - post.createdDate)
@@ -64,7 +63,7 @@ router.post("/:id", [auth, validate(validateGuruForumPost)], async (req, res) =>
     
     try {
         forumPost = await forumPost.save();
-        res.send({ ..._.pick(posts, ["_id", "title"]) });
+        res.send({ ..._.pick(forumPost, ["_id", "title"]) });
     } catch (error) {
         res.status(400).send(error.message);
     }
@@ -72,7 +71,7 @@ router.post("/:id", [auth, validate(validateGuruForumPost)], async (req, res) =>
 
 router.put("/post/incrementViews/:id",[auth], async (req, res) => {
     // console.log(req.user._id)
-    const post = await GuruForumPost.findById(req.params.id);
+    let post = await GuruForumPost.findById(req.params.id);
     if (!post) return res.status(404).send("Forum Post does not exist...");
 
     try{
@@ -81,13 +80,11 @@ router.put("/post/incrementViews/:id",[auth], async (req, res) => {
     } catch (error) {
         res.status(400).send(error.message);
     }
-
-    res.send(post);
 });
 
 router.put("/post/incrementComments/:id",[auth], async (req, res) => {
     // console.log(req.user._id)
-    const post = await GuruForumPost.findById(req.params.id);
+    let post = await GuruForumPost.findById(req.params.id);
     if (!post) return res.status(404).send("Forum Post does not exist...");
 
     try{
@@ -96,8 +93,6 @@ router.put("/post/incrementComments/:id",[auth], async (req, res) => {
     } catch (error) {
         res.status(400).send(error.message);
     }
-
-    res.send(post);
 });
 
 router.put("/post/toggleLike",[auth], async (req, res) => {
@@ -108,7 +103,7 @@ router.put("/post/toggleLike",[auth], async (req, res) => {
 
     if(!postId || !userId) return res.status(404).send("Please provide post Id and user Id...");
 
-    const post = await GuruForumPost.findById(postId);
+    let post = await GuruForumPost.findById(postId);
     if (!post) return res.status(404).send("Forum Post does not exist...");
 
     let likes = post.likes
@@ -124,8 +119,6 @@ router.put("/post/toggleLike",[auth], async (req, res) => {
     } catch (error) {
         res.status(400).send(error.message);
     }
-
-    res.send(post);
 });
 
 module.exports = router;

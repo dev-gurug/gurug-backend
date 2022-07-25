@@ -12,11 +12,12 @@ router.get("/me", auth, async (req, res) => {
   const user = await User.findById(req.user._id).select("-password");
   if(user.badges){
         const badges = await Badges.find({_id: {"$in": user.badges}})
+        console.log(badges)
         if(user.badges.length > 0){
             let cBadges = []
             badges.forEach((badge) =>{
                 user.badges.forEach((userBadge) =>{
-                    if(userBadge === badge._id){
+                    if(userBadge === badge._id.toString()){
                         cBadges.push(badge)
                     }
                 })
@@ -36,7 +37,7 @@ router.get("/findEmail", async (req, res) => {
   if(!email) res.status(404).send("Enter an Email...");
 
   let user = await User.findOne({ email });
-  if (user) res
+  if (user) return  res
       .status(400)
       .send("Email already registered. Please Use another email.");
 
@@ -49,7 +50,7 @@ router.get("/findPhone", async (req, res) => {
   if(!phone) res.status(404).send("Enter an PhoneNumber...");
 
   let user = await User.findOne({ phone });
-  if (user) res
+  if (user) return res
       .status(400)
       .send("Phone Number already registered. Please Use another Phone Number.");
 
