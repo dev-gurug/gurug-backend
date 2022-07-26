@@ -6,6 +6,7 @@ const auth = require("../../middleware/auth");
 // const guru = require("../../middleware/guru");
 const validate = require("../../middleware/validate");
 const { Events, validatePost } = require("../../models/resources/events_model");
+const mongoose = require("mongoose");
 
 
 router.get("/", async (req, res) => {
@@ -30,7 +31,7 @@ router.get("/:id", async (req, res) => {
 
 router.post("/", [auth], async (req, res) => {
   console.log(req);
-  let events = Events(_.pick(req.body, ["title", "tags", "guruEvent", "user", "location", "city", "state", "isPrivate", "date", "eventImage", "eventType", "nameOfOrganizer", "numberOfAttendees", "linkOfEvent", "adminEvent", "userEvent", "eventStatus", "description","eventEndTime","eventStartTime"]));
+  let events = Events(_.pick(req.body, ["title", "tags", "guruEvent", "user", "date", "eventImage", "eventType", "nameOfOrganizer", "numberOfAttendees", "linkOfEvent", "adminEvent", "userEvent", "eventStatus", "description","eventEndTime","eventStartTime","address1","address2"]));
 
   try {
     events = await events.save();
@@ -52,8 +53,8 @@ router.post("/:id/:eventStatus", [auth], async (req, res) => {
 router.put("/:id", [auth], async (req, res) => {
   console.log(req.params);
   console.log(req.body);
-   const event = await Events.findByIdAndUpdate(req.params.id, { eventStatus: req.body.eventStatus, tags : req.body.tags, description : req.body.description, date : req.body.date, notes : req.body.notes, eventStartTime : req.body.startTime, eventEndTime : req.body.endTime, isPrivate : req.body.isPrivate, 
-  title : req.body.title,city : req.body.city, state : req.body.state, location : req.body.location, eventType : req.body.eventType , eventImage : req.body.eventImage, linkOfEvent : req.body.linkOfEvent , nameOfOrganizer : req.body.nameOfOrganizer, numberOfAttendees : req.body.numberOfAttendees, tags : req.body.tags},
+   const event = await Events.findByIdAndUpdate(req.params.id, { eventStatus: req.body.eventStatus, tags : req.body.tags, description : req.body.description, date : req.body.date, notes : req.body.notes, eventStartTime : req.body.eventStartTime, eventEndTime : req.body.eventStartTime, 
+  title : req.body.title, address2 : req.body.address2, address1 : req.body.address1, eventType : req.body.eventType , eventImage : req.body.eventImage, linkOfEvent : req.body.linkOfEvent , nameOfOrganizer : req.body.nameOfOrganizer, numberOfAttendees : req.body.numberOfAttendees, tags : req.body.tags, joinedIds : req.body.joinedIds},
      { new: true , useFindAndModify: false, strict: false });
    if (!event) return res.status(404).send("Event does not exist...");
    res.send(event);
@@ -62,6 +63,15 @@ router.put("/:id", [auth], async (req, res) => {
 router.delete("/:id/", [auth], async (req, res) => {
   console.log(req.params.id);
   const event = await Events.findByIdAndDelete(req.params.id,{ new: false , useFindAndModify: false, strict: false });
+  if (!event) return res.status(404).send("Event does not exist...");
+  res.send(event);
+});
+
+router.put("/addUser/:id", [auth], async (req, res) => {
+  console.log(req.params.id);
+  console.log(req.body.joinedIds);
+  const event = await Events.findByIdAndUpdate(req.body.id ,{ joinedIds: req.body.joinedIds },
+    { new: true, useFindAndModify: false, strict: false });
   if (!event) return res.status(404).send("Event does not exist...");
   res.send(event);
 });

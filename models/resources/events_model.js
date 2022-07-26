@@ -15,24 +15,23 @@ const EventsSchema = mongoose.Schema({
     required: true,
   },
   guruEvent: Boolean,
-  city : String,
-  isPrivate : Boolean,
-  description : String,
-  linkOfEvent : String,
-  location : String,
-  nameOfOrganizer : String,
-  numberOfAttendees : String,
-  state:String,
-  date : String,
-  eventImage : String,
-  eventType : String,
-  userEvent : Boolean,
-  isAdmin : Boolean,
-  adminEvent : Boolean,
-  eventEndTime : String,
-  eventStartTime : String,
-  eventStatus : String,
-  notes : String
+  address2: String,
+  description: String,
+  linkOfEvent: String,
+  nameOfOrganizer: String,
+  numberOfAttendees: String,
+  address1: String,
+  date: String,
+  eventImage: String,
+  eventType: String,
+  userEvent: Boolean,
+  isAdmin: Boolean,
+  adminEvent: Boolean,
+  eventEndTime: String,
+  eventStartTime: String,
+  eventStatus: String,
+  notes: String,
+  joinedIds: [String]
 });
 
 
@@ -44,8 +43,8 @@ function validatePost(req) {
   const schema = Joi.object({
     title: Joi.string().required().max(50),
     tags: Joi.array(),
-    user : Joi.objectId().required(),
-    guruEvent : Joi.boolean(),
+    user: Joi.objectId().required(),
+    guruEvent: Joi.boolean(),
   });
   return schema.validate(req);
 }

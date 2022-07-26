@@ -61,4 +61,11 @@ router.post("/", [auth, validate(validateComment)], async (req, res) => {
   }
 });
 
+router.delete("/:id/", [auth], async (req, res) => {
+  console.log(req.params.id);
+  const comment = await Comments.findByIdAndDelete(req.params.id,{ new: false , useFindAndModify: false, strict: false });
+  if (!comment) return res.status(404).send("Event does not exist...");
+  res.send(comment);
+});
+
 module.exports = router;
