@@ -48,7 +48,7 @@ router.post("/:id/:eventStatus", [auth], async (req, res) => {
   res.send(group);
 });
 
-router.put("/addUser:id", [auth], async (req, res) => {
+router.put("/addUser/:id", [auth], async (req, res) => {
   console.log(req.params);
   console.log(req.body);
   const group = await Group.findByIdAndUpdate(req.params.id, { usersAssociated: req.body.usersAssociated , memberCount : req.body.memberCount },
