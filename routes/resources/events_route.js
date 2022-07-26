@@ -70,9 +70,10 @@ router.delete("/:id/", [auth], async (req, res) => {
 router.put("/addUser/:id", [auth], async (req, res) => {
   console.log(req.params.id);
   console.log(req.body.joinedIds);
-  const event = await Events.findByIdAndUpdate(req.body.id ,{ joinedIds: req.body.joinedIds },
+  const event = await Events.findByIdAndUpdate(mongoose.Types.ObjectId(req.params.id) ,{ joinedIds: req.body.joinedIds },
     { new: true, useFindAndModify: false, strict: false });
   if (!event) return res.status(404).send("Event does not exist...");
+  console.log(event)
   res.send(event);
 });
 
