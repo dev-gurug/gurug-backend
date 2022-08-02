@@ -7,7 +7,7 @@ const validate = require("../../middleware/validate");
 const { GPost, validatePost } = require("../../models/resources/gposts_model");
 
 
-router.get("/" , async (req, res) => {
+router.get("/", async (req, res) => {
   console.log(GPost, "gpost model");
   const group = await GPost.find();
   console.log(group);
@@ -24,7 +24,7 @@ router.get("/:groupId", [auth], async (req, res) => {
 
 router.post("/", [auth], async (req, res) => {
   console.log(req.body);
-  let group = GPost(_.pick(req.body, ["title", "groupPostImage", "description", "groupId", "date","userId"]));
+  let group = GPost(_.pick(req.body, ["title", "groupPostImage", "description", "groupId", "date", "userId"]));
   try {
     group = await group.save();
     res.send({ ..._.pick(group, ["_id", "title"]) });
@@ -66,24 +66,35 @@ router.post("/updatelikes", [auth], async (req, res) => {
 
 router.delete("/:id/", [auth], async (req, res) => {
   console.log(req.params.id);
-  const event = await GPost.findByIdAndDelete(req.params.id,{ new: false , useFindAndModify: false, strict: false });
+  const event = await GPost.findByIdAndDelete(req.params.id, { new: false, useFindAndModify: false, strict: false });
   if (!event) return res.status(404).send("Event does not exist...");
   res.send(event);
 });
 
-router.put("/post/incrementComments/:id",[auth], async (req, res) => {
+router.put("/post/incrementComments/:id", [auth], async (req, res) => {
   // console.log(req.user._id)
   const post = await GPost.findById(req.params.id);
   if (!post) return res.status(404).send("Forum Post does not exist...");
 
-  try{
-      post = await GPost.findByIdAndUpdate(post._id, {$set: {comments : post.comments+1}}, {new : true})
-      res.send(post)
+  try {
+    post = await GPost.findByIdAndUpdate(post._id, { $set: { comments: post.comments + 1 } }, { new: true })
+    res.send(post)
   } catch (error) {
-      res.status(400).send(error.message);
+    res.status(400).send(error.message);
   }
 
   res.send(post);
+});
+
+router.post("/getUsersGroups", [auth], async (req, res) => {
+  console.log(req.body)
+  try {
+    let posts = await GPost.find({ groupId: { $in: req.body } });
+    res.send(posts);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+
 });
 
 // router.get("/:id", async (req, res) => {
