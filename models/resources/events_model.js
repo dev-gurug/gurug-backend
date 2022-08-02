@@ -31,7 +31,11 @@ const EventsSchema = mongoose.Schema({
   eventStartTime: String,
   eventStatus: String,
   notes: String,
-  joinedIds: [String]
+  joinedIds: [String],
+  country: String,
+  state: String,
+  city: String,
+  contactNo: Number
 });
 
 

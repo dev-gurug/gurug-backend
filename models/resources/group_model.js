@@ -14,16 +14,16 @@ const GroupSchema = mongoose.Schema({
     type: Schema.Types.Mixed,
     required: true,
   },
-  
-  groupImage : String,
-  description : String,
-  showPhone : Boolean,
-  phoneNo : String,
-  creatorName : String,
-  memberCount : Number,
-  usersAssociated : [Object],
-  groupManagers : [String],
-  date : Date
+
+  groupImage: String,
+  description: String,
+  showPhone: Boolean,
+  phoneNo: String,
+  creatorName: String,
+  memberCount: Number,
+  usersAssociated: [Object],
+  groupManagers: [Object],
+  date: Date
 });
 
 
@@ -35,7 +35,7 @@ function validatePost(req) {
   const schema = Joi.object({
     title: Joi.string().required().max(50),
     tags: Joi.array(),
-    user : Joi.objectId().required(),
+    user: Joi.objectId().required(),
   });
   return schema.validate(req);
 }
