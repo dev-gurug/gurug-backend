@@ -31,7 +31,7 @@ router.get("/:id", async (req, res) => {
 
 router.post("/", [auth], async (req, res) => {
   console.log(req.body);
-  let group = Group(_.pick(req.body, ["title", "tags", "groupImage", "user", "creatorName", "memberCount", "description", "phoneNo", "groupManagers", "date", "showPhone"]));
+  let group = Group(_.pick(req.body, ["title", "tags", "groupImage", "user", "creatorName", "memberCount", "description", "date"]));
   try {
     group = await group.save();
     res.send({ ..._.pick(group, ["_id", "title"]) });
@@ -67,7 +67,7 @@ router.put("/addManagers:id", [auth], async (req, res) => {
   console.log(req.body);
   const group = await Group.findByIdAndUpdate(req.params.id, {
     title: req.body.title, tags: req.body.tags, groupImage: req.body.groupImage,
-    description: req.body.description, groupManagers: req.body.groupManagers, phoneNo: req.body.phoneNo, showPhone: req.body.showPhone,
+    description: req.body.description, groupManagers: req.body.groupManagers,
     creatorName: req.body.creatorName
   }, { new: true, useFindAndModify: false, strict: false });
   if (!group) return res.status(404).send("Event does not exist...");

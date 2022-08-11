@@ -17,12 +17,10 @@ const GroupSchema = mongoose.Schema({
 
   groupImage: String,
   description: String,
-  showPhone: Boolean,
-  phoneNo: String,
   creatorName: String,
   memberCount: Number,
   usersAssociated: [Object],
-  groupManagers: [Object],
+  groupManagers: [String],
   date: Date
 });
 

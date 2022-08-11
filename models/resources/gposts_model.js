@@ -9,15 +9,15 @@ const GPostSchema = mongoose.Schema({
     required: true,
     maxlength: 50,
   },
-  
-  groupPostImage : String,
-  description : String,
-  date : Date,
-  groupId : String,
+
+  groupPostImage: String,
+  description: String,
+  date: Date,
+  groupId: String,
   likes: [String],
   views: Number,
-  userId : String,
-  comments: Number,
+  userId: String,
+  comments: Number
 });
 
 const GPost = mongoose.model("GPost", GPostSchema);
@@ -25,7 +25,7 @@ const GPost = mongoose.model("GPost", GPostSchema);
 function validatePost(req) {
   const schema = Joi.object({
     title: Joi.string().required().max(50),
-    
+
   });
   return schema.validate(req);
 }
