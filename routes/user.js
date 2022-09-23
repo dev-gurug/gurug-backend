@@ -95,12 +95,12 @@ router.get("/all-gurus", auth, async (req, res) => {
 router.get("/all-keyUsers", auth, async (req, res) => {
   console.log("in route all-key");
   let users = await User.find({isKeyUser: true}).select("-password");
+  console.log(users)
   if (!users) return res.status(404).send("No Key User exist...");
   res.send(users);
 });
 
 router.get("/gurus/:id", auth, async (req, res) => {
-    console.log("sd")
     const user = await User.findById(req.params.id).select("-password");
     if (!user) return res.status(404).send("Guru does not exist...");
     res.send(user);

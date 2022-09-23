@@ -14,17 +14,14 @@ const GroupSchema = mongoose.Schema({
     type: Schema.Types.Mixed,
     required: true,
   },
-
   groupImage: String,
   description: String,
   creatorName: String,
   memberCount: Number,
   usersAssociated: [Object],
-  groupManagers: [String],
-  date: Date
+  groupManagers: [Object],
+  createdDate: Date
 });
-
-
 
 
 const Group = mongoose.model("Group", GroupSchema);

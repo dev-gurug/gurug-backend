@@ -9,15 +9,18 @@ const GPostSchema = mongoose.Schema({
     required: true,
     maxlength: 50,
   },
-
+  
   groupPostImage: String,
   description: String,
-  date: Date,
   groupId: String,
   likes: [String],
   views: Number,
   userId: String,
-  comments: Number
+  comments: Number,
+  createdDate : {
+    type: Date,
+    required: true,
+  },
 });
 
 const GPost = mongoose.model("GPost", GPostSchema);

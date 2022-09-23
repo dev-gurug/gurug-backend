@@ -81,4 +81,3 @@ router.put("/addUser/:id", [auth], async (req, res) => {
 });
 
 module.exports = router;
-

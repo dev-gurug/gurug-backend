@@ -31,7 +31,7 @@ router.get("/:id", async (req, res) => {
 
 router.post("/", [auth], async (req, res) => {
   console.log(req.body);
-  let group = Group(_.pick(req.body, ["title", "tags", "groupImage", "user", "creatorName", "memberCount", "description", "date"]));
+  let group = Group(_.pick(req.body, ["title", "tags", "groupImage", "user", "creatorName", "memberCount", "description", "createdDate", "groupManagers"]));
   try {
     group = await group.save();
     res.send({ ..._.pick(group, ["_id", "title"]) });

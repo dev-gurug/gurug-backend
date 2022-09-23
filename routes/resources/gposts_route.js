@@ -8,23 +8,19 @@ const { GPost, validatePost } = require("../../models/resources/gposts_model");
 
 
 router.get("/", async (req, res) => {
-  console.log(GPost, "gpost model");
   const group = await GPost.find();
-  console.log(group);
   if (!group) return res.status(404).send("Post does not exist...");
   res.send(group);
 });
 
 router.get("/:groupId", [auth], async (req, res) => {
-  console.log(req.params.groupId)
   const group = await GPost.find({ groupId: req.params.groupId });
   if (!group) return res.status(404).send("Posts do not exist...");
   res.send(group);
 });
 
 router.post("/", [auth], async (req, res) => {
-  console.log(req.body);
-  let group = GPost(_.pick(req.body, ["title", "groupPostImage", "description", "groupId", "date", "userId"]));
+  let group = GPost(_.pick(req.body, ["title", "groupPostImage", "description", "groupId", "userId", "createdDate"]));
   try {
     group = await group.save();
     res.send({ ..._.pick(group, ["_id", "title"]) });
@@ -34,8 +30,6 @@ router.post("/", [auth], async (req, res) => {
 });
 
 router.post("/update", [auth], async (req, res) => {
-  console.log(req.params);
-  console.log(req.body);
   const group = await GPost.findByIdAndUpdate(req.body.id, { title: req.body.title, description: req.body.description, groupPostImage: req.body.groupPostImage },
     { new: true, useFindAndModify: false, strict: false });
   if (!group) return res.status(404).send("Event does not exist...");
@@ -49,7 +43,6 @@ router.get("/fetch/:id", [auth], async (req, res) => {
 });
 
 router.post("/incrementview", [auth], async (req, res) => {
-  console.log(req.body);
   const group = await GPost.findByIdAndUpdate(req.body._id, { views: req.body.views },
     { new: true, useFindAndModify: false, strict: false });
   if (!group) return res.status(404).send("Event does not exist...");
@@ -57,7 +50,6 @@ router.post("/incrementview", [auth], async (req, res) => {
 });
 
 router.post("/updatelikes", [auth], async (req, res) => {
-  console.log(req.body);
   const group = await GPost.findByIdAndUpdate(req.body._id, { likes: req.body.likes },
     { new: true, useFindAndModify: false, strict: false });
   if (!group) return res.status(404).send("Event does not exist...");
@@ -65,14 +57,12 @@ router.post("/updatelikes", [auth], async (req, res) => {
 });
 
 router.delete("/:id/", [auth], async (req, res) => {
-  console.log(req.params.id);
   const event = await GPost.findByIdAndDelete(req.params.id, { new: false, useFindAndModify: false, strict: false });
   if (!event) return res.status(404).send("Event does not exist...");
   res.send(event);
 });
 
 router.put("/post/incrementComments/:id", [auth], async (req, res) => {
-  // console.log(req.user._id)
   const post = await GPost.findById(req.params.id);
   if (!post) return res.status(404).send("Forum Post does not exist...");
 
@@ -87,7 +77,6 @@ router.put("/post/incrementComments/:id", [auth], async (req, res) => {
 });
 
 router.post("/getUsersGroups", [auth], async (req, res) => {
-  console.log(req.body)
   try {
     let posts = await GPost.find({ groupId: { $in: req.body } });
     res.send(posts);

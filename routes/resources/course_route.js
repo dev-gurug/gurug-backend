@@ -53,7 +53,6 @@ router.get("/guru/:id", [auth], async (req, res) => {
 
 router.get("/myCourses", [auth], async (req, res) => {
   const allProgress = await CourseProgress.find({ user: req.user._id });
-  console.log("asd")
   if (!allProgress) return res.status(404).send("No Courses Started...");
   res.send(allProgress);
 });
@@ -87,7 +86,6 @@ router.post("/create-progress", [auth, validate(validateCourseProgress)], async 
   });
   
   router.post("/", [auth, guru, validate(validateCourse)], async (req, res) => {
-    console.log("SDfsdf");
     let course = Course(
       _.pick(req.body, [
         "title",

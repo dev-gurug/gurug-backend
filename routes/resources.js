@@ -9,6 +9,7 @@ const group = require("./resources/groups_route")
 const gpost = require("./resources/gposts_route")
 const comment = require("./resources/comment_route")
 const badge = require("./resources/badge_route")
+const userWall = require("./resources/userWall_route")
 
 router.use("/gyan",gyan);
 router.use("/posts", posts);
@@ -19,5 +20,7 @@ router.use("/gposts", gpost);
 router.use("/group", group);
 router.use("/comments", comment);
 router.use("/badges", badge)
+router.use("/wall", userWall);
+
 
 module.exports = router;
