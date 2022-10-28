@@ -10,8 +10,9 @@ const gpost = require("./resources/gposts_route")
 const comment = require("./resources/comment_route")
 const badge = require("./resources/badge_route")
 const userWall = require("./resources/userWall_route")
+const prayer = require("./resources/prayers_route")
 
-router.use("/gyan",gyan);
+router.use("/gyan", gyan);
 router.use("/posts", posts);
 router.use("/course", course);
 router.use("/events", events);
@@ -21,6 +22,6 @@ router.use("/group", group);
 router.use("/comments", comment);
 router.use("/badges", badge)
 router.use("/wall", userWall);
-
+router.use("/prayers", prayer);
 
 module.exports = router;
