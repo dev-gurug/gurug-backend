@@ -1,4 +1,5 @@
 const express = require("express");
+const { zip } = require("lodash");
 const _ = require("lodash");
 const router = express.Router();
 const auth = require("../../middleware/auth");
@@ -13,18 +14,24 @@ router.get("/", async (req, res) => {
     res.send(prayer);
 });
 
-// router.get("/user", [auth], async (req, res) => {
-//   console.log(req.user._id)
-//   const group = await Group.find({ user: req.user._id });
-//   if (!group) return res.status(404).send("Posts do not exist...");
-//   res.send(group);
-// });
-
 
 router.get("/:id", async (req, res) => {
     const prayer = await Prayer.findById(req.params.id);
     if (!prayer) return res.status(404).send("Post does not exist...");
     res.send(prayer);
+});
+
+
+
+router.get("/userID/:user", async (req, res) => {
+    try {
+        console.log(req.params, "params")
+        const prayer = await Prayer.find({ user: req.params.user });
+        if (prayer.length === 0) return res.status(400).send("Prayer does not exist...");
+        return res.status(200).send(prayer)
+    } catch (err) {
+        return res.status(500).send(err.message);
+    }
 });
 
 
@@ -50,35 +57,7 @@ router.post("/incrementPrayerCount", [auth], async (req, res) => {
     res.send(prayer);
 });
 
-// router.put("/removeGroupManager:id", [auth], async (req, res) => {
-//     console.log(req.params);
-//     console.log(req.body);
-//     const group = await Group.findByIdAndUpdate(req.params.id, { groupManagers: req.body.groupManager },
-//         { new: true, useFindAndModify: false, strict: false });
-//     if (!group) return res.status(404).send("Event does not exist...");
-//     res.send(group);
-// });
 
-
-
-// router.put("/addManagers:id", [auth], async (req, res) => {
-//     console.log(req.params);
-//     console.log(req.body);
-//     const group = await Group.findByIdAndUpdate(req.params.id, {
-//         title: req.body.title, tags: req.body.tags, groupImage: req.body.groupImage,
-//         description: req.body.description, groupManagers: req.body.groupManagers,
-//         creatorName: req.body.creatorName
-//     }, { new: true, useFindAndModify: false, strict: false });
-//     if (!group) return res.status(404).send("Event does not exist...");
-//     res.send(group);
-// });
-
-// router.delete("/:id/", [auth], async (req, res) => {
-//     console.log(req.params.id);
-//     const event = await Group.findByIdAndDelete(req.params.id, { new: false, useFindAndModify: false, strict: false });
-//     if (!event) return res.status(404).send("Event does not exist...");
-//     res.send(event);
-// });
 
 module.exports = router;
 
