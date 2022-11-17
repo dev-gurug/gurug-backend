@@ -22,7 +22,7 @@ router.get("/recommended", async (req, res) => {
 
   const getByTags = async (gyan) => {
     if (!gyan.tags) return [];
-    let query =[{ _id: { $ne: gyan._id} }, { tags: { $in: gyan.tags } }]
+    let query = [{ _id: { $ne: gyan._id } }, { tags: { $in: gyan.tags } }]
     let byTags = await Gyan.find({ $and: query });
     if (!byTags) return [];
     if (byTags.length <= 0) return [];
@@ -32,7 +32,7 @@ router.get("/recommended", async (req, res) => {
 
   const getByMedia = async (gyan) => {
     if (!gyan.mediaType) return [];
-    let query =[{ _id: { $ne: gyan._id} }, { mediaType: gyan.mediaType }]
+    let query = [{ _id: { $ne: gyan._id } }, { mediaType: gyan.mediaType }]
     let byMedia = await Gyan.find({ $and: query });
     if (!byMedia) return [];
     if (byMedia.length <= 0) return [];
@@ -57,10 +57,10 @@ router.get("/recommended", async (req, res) => {
   allFound = [...byTags, ...byMedia];
   if (allFound.length >= 3) return res.send([allFound[0], allFound[1], allFound[2]]);
   console.log(3)
-  
+
   gyan = await Gyan.find(query);
   if (!gyan) {
-    if(allFound.length === 0) return res.status(404).send("Gyan does not exist...");
+    if (allFound.length === 0) return res.status(404).send("Gyan does not exist...");
     return res.send(allFound);
   }
   console.log(4)
@@ -96,7 +96,7 @@ router.get("/", async (req, res) => {
   res.send(gyan);
 });
 
-router.post("/", [auth, admin, validate(validateGyan)], async (req, res) => {
+router.post("/", [auth, validate(validateGyan)], async (req, res) => {
   let gyan = Gyan(
     _.pick(req.body, [
       "title",

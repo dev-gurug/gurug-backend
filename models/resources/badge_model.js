@@ -7,10 +7,10 @@ const BadgeSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  image : {
-    type : String,
-    required : true
-}
+  image: {
+    type: String,
+    required: true
+  }
 });
 
 const Badges = mongoose.model("Badges", BadgeSchema);
@@ -18,7 +18,7 @@ const Badges = mongoose.model("Badges", BadgeSchema);
 function validateBadge(req) {
   const schema = Joi.object({
     title: Joi.string().required(),
-    image : Joi.string().required(),
+    image: Joi.string().required(),
   });
   return schema.validate(req);
 }

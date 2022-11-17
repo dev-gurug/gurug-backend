@@ -17,10 +17,10 @@ router.get("/:id", async (req, res) => {
 
 router.post("/", [auth, admin, validate(validateInvitation)], async (req, res) => {
   let user = await User.findOne({ email: req.body.email });
-  if (user)return res.status(400).send("Email already registered. Please Use another email.");
+  if (user) return res.status(400).send("Email already registered. Please Use another email.");
 
   let sentInvitation = await Invitation.findOne({ email: req.body.email });
-  if (sentInvitation)return res.status(400).send("Invitation already sent to this email.");
+  if (sentInvitation) return res.status(400).send("Invitation already sent to this email.");
 
   let invitationObject = {};
   let emailTemplateId;
@@ -37,6 +37,12 @@ router.post("/", [auth, admin, validate(validateInvitation)], async (req, res) =
     link = "https://www.guru-g.app/guru-signup/";
   }
 
+  if (req.body.subAdmin) {
+    invitationObject = Invitation(_.pick(req.body, ["firstName", "lastName", "email", "subAdmin"]));
+    emailTemplateId = "d-6f84291ca9d64f859f0aa9254aaa10f9";
+    link = "https://www.guru-g.app/subadmin-signup/";
+  }
+
   try {
     let invitation = await invitationObject.save();
     let emailData = {
@@ -44,7 +50,7 @@ router.post("/", [auth, admin, validate(validateInvitation)], async (req, res) =
       template_id: emailTemplateId,
       variables: {
         Weblink: link + invitation._id,
-        name : invitationObject.firstName + " " + invitationObject.lastName
+        name: invitationObject.firstName + " " + invitationObject.lastName
       },
     };
 
@@ -57,6 +63,7 @@ router.post("/", [auth, admin, validate(validateInvitation)], async (req, res) =
         "email",
         "keyUser",
         "guru",
+        "subAdmin"
       ]),
     });
   } catch (error) {
