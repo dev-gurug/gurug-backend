@@ -29,6 +29,7 @@ const CourseSchema = mongoose.Schema({
               _id : String,
               title : String,
               link : String,
+              mediaType : String,
               description : String
           }
       ]
