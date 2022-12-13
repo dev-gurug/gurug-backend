@@ -3,6 +3,8 @@ const router = express.Router();
 const followers = require("./user_actions/followers_route")
 const verifyEmail = require("./user_actions/verifyEmail_route")
 const verifyPhone = require("./user_actions/verifyPhone_route")
+const config = require("config");
+const sgMail = require("@sendgrid/mail");
 
 router.use("/followers", followers);
 router.use("/verify_email", verifyEmail);

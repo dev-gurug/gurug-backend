@@ -1,7 +1,16 @@
 const winston = require("winston");
 const express = require("express");
+const cors = require('cors');
 const mongoose = require("mongoose");
 const app = express();
+
+// Configure the cors middleware
+const corsOptions = {
+  origin: '*', // Allow all origins
+  credentials: true, // Allow credentials (cookies, etc.)
+};
+
+app.use(cors(corsOptions));
 
 //-------refactored code in startup folder----------------
 // require("./startup/logging")();
