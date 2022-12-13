@@ -5,6 +5,7 @@ const router = express.Router();
 const Joi = require("joi");
 
 router.post("/", async (req, res) => {
+  console.log("in login")
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
