@@ -18,9 +18,10 @@ const GyanSchema = mongoose.Schema({
   createdDate : {
       type : Date,
       required : true
-  }
+  },
+  adminId : String,
+  disabled : Boolean
 });
-
 
 const Gyan = mongoose.model("Gyan", GyanSchema);
 
@@ -32,6 +33,8 @@ function validateGyan(req) {
     image : Joi.string(),
     mediaLink : Joi.string().optional().allow(""),
     mediaType : Joi.string().optional().allow(""),
+    adminId : Joi.string().optional().allow(""),
+    disabled : Joi.boolean(),
     createdDate : Joi.date().required(),
   });
   return schema.validate(req);
