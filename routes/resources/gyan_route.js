@@ -6,7 +6,6 @@ const admin = require("../../middleware/admin");
 const validate = require("../../middleware/validate");
 const { Gyan, validateGyan } = require("../../models/resources/gyan_model");
 const subAdmin = require("../../middleware/subAdmin");
-const { Mongoose } = require("mongoose");
 const adminSubAdmin = require("../../middleware/adminSubAdmin");
 
 router.get("/recommended", async (req, res) => {
@@ -144,7 +143,7 @@ router.post("/", [auth, validate(validateGyan)], async (req, res) => {
 router.put("/enable/:id", [auth, admin], async (req, res) => {
   try {
     const gyan = await Gyan.findByIdAndUpdate(
-      Mongoose.Types.ObjectId(req.params.id),
+      req.params.id,
       { diabled: false },
       { new: true, useFindAndModify: false, strict: false }
     );
