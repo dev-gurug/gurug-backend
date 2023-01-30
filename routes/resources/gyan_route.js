@@ -110,7 +110,7 @@ router.get("/", async (req, res) => {
 
 router.get("/pending", [auth, subAdmin], async (req, res) => {
   let gyan;
-  gyan = await Gyan.find({ adminId: req.user._id.toString() });
+  // gyan = await Gyan.find({ adminId: req.user._id });
   if (!gyan) return res.status(404).send("Gyan does not exist...");
   gyan = gyan.filter((g) => g.disabled);
   if (gyan.length === 0) return res.status(404).send("Gyan does not exist...");
