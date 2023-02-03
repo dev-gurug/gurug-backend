@@ -118,7 +118,7 @@ router.get("/", async (req, res) => {
 // });
 
 router.post("/", [auth, validate(validateGyan)], async (req, res) => {
-  if (req.user.isSubAdmin) req.body.disabled = true;
+  // if (req.user.isSubAdmin) req.body.disabled = true;
   let gyan = Gyan(
     _.pick(req.body, [
       "title",
