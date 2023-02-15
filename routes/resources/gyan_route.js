@@ -108,17 +108,27 @@ router.get("/", async (req, res) => {
   res.send(gyan);
 });
 
-// router.get("/pending", [auth, subAdmin], async (req, res) => {
-//   let gyan;
-//   gyan = await Gyan.find({ adminId: req.user._id });
-//   if (!gyan) return res.status(404).send("Gyan does not exist...");
-//   gyan = gyan.filter((g) => g.disabled);
-//   if (gyan.length === 0) return res.status(404).send("Gyan does not exist...");
-//   res.send(gyan);
-// });
+router.get("/pending", [auth, subAdmin], async (req, res) => {
+  let gyan;
+  gyan = await Gyan.find({ adminId: req.user._id });
+  if (!gyan) return res.send([]);
+  gyan = gyan.filter((g) => g.disabled);
+  if (gyan.length === 0) return res.send([]);
+  res.send(gyan);
+});
+
+router.get("/allPending", [auth, admin], async (req, res) => {
+  let gyan;
+  gyan = await Gyan.find();
+  if (!gyan) return res.send([]);
+  gyan = gyan.filter((g) => g.disabled);
+  if (gyan.length === 0) return res.send([]);
+  res.send(gyan);
+});
 
 router.post("/", [auth, validate(validateGyan)], async (req, res) => {
-  // if (req.user.isSubAdmin) req.body.disabled = true;
+  if (req.user.isSubAdmin) req.body.disabled = true;
+  req.body.adminId = req.user._id.toString()
   let gyan = Gyan(
     _.pick(req.body, [
       "title",
@@ -132,6 +142,7 @@ router.post("/", [auth, validate(validateGyan)], async (req, res) => {
       "adminId",
     ])
   );
+
   try {
     gyan = await gyan.save();
     res.send({ ..._.pick(gyan, ["_id", "title"]) });
@@ -140,32 +151,28 @@ router.post("/", [auth, validate(validateGyan)], async (req, res) => {
   }
 });
 
-// router.put("/enable/:id", [auth, admin], async (req, res) => {
-//   try {
-//     const gyan = await Gyan.findByIdAndUpdate(
-//       req.params.id,
-//       { diabled: false },
-//       { new: true, useFindAndModify: false, strict: false }
-//     );
-//     res.send({ ..._.pick(gyan, ["_id", "title"]) });
-//   } catch (error) {
-//     res.status(400).send(error.message);
-//   }
-// });
+router.put("/enable/:id", [auth, admin], async (req, res) => {
+  try {
+    const gyan = await Gyan.findByIdAndUpdate(
+      req.params.id,
+      { diabled: false },
+      { new: true, useFindAndModify: false, strict: false }
+    );
+    res.send({ ..._.pick(gyan, ["_id", "title"]) });
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+});
 
-// router.delete("/:id", [auth, adminSubAdmin], async (req, res) => {
-//   try {
-//     const gyan = await Gyan.findByIdAndDelete(req.params.id, {
-//       new: false,
-//       useFindAndModify: false,
-//       strict: false,
-//     });
-//     if (!gyan) return res.status(404).send("Gyan does not exist...");
-//     res.status(200).send();
-//   } catch (error) {
-//     res.status(400).send(error.message);
-//   }
-// });
+router.delete("/:id", [auth, adminSubAdmin], async (req, res) => {
+  try {
+    const gyan = await Gyan.findByIdAndDelete(req.params.id);
+    if (!gyan) return res.status(404).send("Gyan does not exist...");
+    res.status(200).send();
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+});
 
 module.exports = router;
 

@@ -35,7 +35,8 @@ const EventsSchema = mongoose.Schema({
   country: String,
   state: String,
   city: String,
-  contactNo: Number
+  contactNo: Number,
+  disabled : Boolean
 });
 
 
