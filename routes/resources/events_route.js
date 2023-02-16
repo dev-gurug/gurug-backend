@@ -9,6 +9,7 @@ const { Events, validatePost } = require("../../models/resources/events_model");
 const mongoose = require("mongoose");
 const subAdmin = require("../../middleware/subAdmin");
 const admin = require("../../middleware/admin");
+const adminSubAdmin = require("../../middleware/adminSubAdmin");
 
 router.get("/", [auth], async (req, res) => {
   const event = await Events.find();
