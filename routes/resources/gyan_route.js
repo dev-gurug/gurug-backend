@@ -82,6 +82,24 @@ router.get("/recommended", async (req, res) => {
   return res.send([allFound[0], allFound[1], allFound[2]]);
 });
 
+router.get("/pending", [auth, subAdmin], async (req, res) => {
+  let gyan;
+  gyan = await Gyan.find({ adminId: req.user._id });
+  if (!gyan) return res.send([]);
+  gyan = gyan.filter((g) => g.disabled);
+  if (gyan.length === 0) return res.send([]);
+  res.send(gyan);
+});
+
+router.get("/allPending", [auth, admin], async (req, res) => {
+  let gyan;
+  gyan = await Gyan.find();
+  if (!gyan) return res.send([]);
+  gyan = gyan.filter((g) => g.disabled);
+  if (gyan.length === 0) return res.send([]);
+  res.send(gyan);
+});
+
 router.get("/:id", async (req, res) => {
   const gyan = await Gyan.findById(req.params.id);
   if (!gyan) return res.status(404).send("Gyan does not exist...");
@@ -105,24 +123,6 @@ router.get("/", async (req, res) => {
   }
   gyan = gyan.filter((v) => !v.disabled);
   if (gyan.length === 0) return res.status(404).send("Gyan does not exist...");
-  res.send(gyan);
-});
-
-router.get("/pending", [auth, subAdmin], async (req, res) => {
-  let gyan;
-  gyan = await Gyan.find({ adminId: req.user._id });
-  if (!gyan) return res.send([]);
-  gyan = gyan.filter((g) => g.disabled);
-  if (gyan.length === 0) return res.send([]);
-  res.send(gyan);
-});
-
-router.get("/allPending", [auth, admin], async (req, res) => {
-  let gyan;
-  gyan = await Gyan.find();
-  if (!gyan) return res.send([]);
-  gyan = gyan.filter((g) => g.disabled);
-  if (gyan.length === 0) return res.send([]);
   res.send(gyan);
 });
 
