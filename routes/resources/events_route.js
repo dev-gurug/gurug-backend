@@ -18,7 +18,7 @@ router.get("/", [auth], async (req, res) => {
 });
 
 router.get(
-  "/getSubadminApprovalPendingEvents",
+  "/subadminApprovalPending",
   [auth, subAdmin],
   async (req, res) => {
     let events = await Events.find({ user: req.user._id });
