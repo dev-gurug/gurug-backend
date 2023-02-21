@@ -155,7 +155,7 @@ router.put("/enable/:id", [auth, admin], async (req, res) => {
   try {
     const gyan = await Gyan.findByIdAndUpdate(
       req.params.id,
-      { diabled: false },
+      { disabled: false },
       { new: true, useFindAndModify: false, strict: false }
     );
     res.send({ ..._.pick(gyan, ["_id", "title"]) });
