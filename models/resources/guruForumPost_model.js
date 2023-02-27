@@ -6,7 +6,7 @@ const GuruForumPostSchema = mongoose.Schema({
   title: {
     type: String,
     required: true,
-    maxlength: 50,
+    maxlength: 500,
   },
   body: {
     type: String,
@@ -33,7 +33,7 @@ const GuruForumPost = mongoose.model("GuruForumPost", GuruForumPostSchema);
 
 function validateGuruForumPost(req) {
   const schema = Joi.object({
-    title: Joi.string().required().max(50),
+    title: Joi.string().required().max(500),
     body: Joi.string().required(),
     user: Joi.objectId().required(),
     guru: Joi.objectId().required(),

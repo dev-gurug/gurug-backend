@@ -7,7 +7,7 @@ const GPostSchema = mongoose.Schema({
   title: {
     type: String,
     required: true,
-    maxlength: 50,
+    maxlength: 500,
   },
   
   groupPostImage: String,
@@ -27,7 +27,7 @@ const GPost = mongoose.model("GPost", GPostSchema);
 
 function validatePost(req) {
   const schema = Joi.object({
-    title: Joi.string().required().max(50),
+    title: Joi.string().required().max(500),
 
   });
   return schema.validate(req);

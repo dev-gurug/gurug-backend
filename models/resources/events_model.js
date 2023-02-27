@@ -7,7 +7,7 @@ const EventsSchema = mongoose.Schema({
   title: {
     type: String,
     required: true,
-    maxlength: 50,
+    maxlength: 500,
   },
   tags: [String],
   user: {
@@ -46,7 +46,7 @@ const Events = mongoose.model("Events", EventsSchema);
 
 function validatePost(req) {
   const schema = Joi.object({
-    title: Joi.string().required().max(50),
+    title: Joi.string().required().max(500),
     tags: Joi.array(),
     user: Joi.objectId().required(),
     guruEvent: Joi.boolean(),

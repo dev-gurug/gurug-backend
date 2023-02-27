@@ -6,7 +6,7 @@ const CourseSchema = mongoose.Schema({
   title: {
     type: String,
     required: true,
-    maxlength: 50,
+    maxlength: 500,
   },
   duration : {
     type: String,
@@ -50,7 +50,7 @@ const Course = mongoose.model("Courses", CourseSchema);
 
 function validateCourse(req) {
   const schema = Joi.object({
-    title: Joi.string().required().max(50),
+    title: Joi.string().required().max(500),
     duration: Joi.string().required(),
     requirements: Joi.string().required(),
     description: Joi.string().required(),

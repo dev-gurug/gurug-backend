@@ -6,7 +6,7 @@ const PostsSchema = mongoose.Schema({
   title: {
     type: String,
     required: true,
-    maxlength: 50,
+    maxlength: 500,
   },
   tags: [String],
   image: String,
@@ -32,7 +32,7 @@ const Posts = mongoose.model("Posts", PostsSchema);
 
 function validatePost(req) {
   const schema = Joi.object({
-    title: Joi.string().required().max(50),
+    title: Joi.string().required().max(500),
     tags: Joi.array(),
     body: Joi.string().required(),
     image: Joi.string(),

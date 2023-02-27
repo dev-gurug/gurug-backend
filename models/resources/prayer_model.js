@@ -7,7 +7,7 @@ const PrayerSchema = mongoose.Schema({
     title: {
         type: String,
         required: true,
-        maxlength: 50,
+        maxlength: 500,
     },
     user: {
         type: String,
@@ -24,7 +24,7 @@ const Prayer = mongoose.model("Prayer", PrayerSchema);
 
 function validatePost(req) {
     const schema = Joi.object({
-        title: Joi.string().required().max(50),
+        title: Joi.string().required().max(500),
         tags: Joi.array(),
         user: Joi.objectId().required(),
     });
