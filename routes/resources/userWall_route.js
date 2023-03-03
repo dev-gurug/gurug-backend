@@ -29,7 +29,7 @@ router.get("/myWall", [auth], async (req, res) => {
 
   //Gyan
   let gyan = await Gyan.find(three_days_query);
-  if (!gyan || gyan.length === 0) gyan = await Gyan.find().limit(2);
+  if (!gyan || gyan.length === 0) gyan = await Gyan.find({disabled : {$ne : true}}).limit(2);
   gyan = gyan.map((item) => ({ ...item._doc, dataType: "gyan" }));
   resourses = resourses.concat(gyan);
 
