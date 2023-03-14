@@ -108,4 +108,14 @@ router.post("/create-progress", [auth, validate(validateCourseProgress)], async 
     }
   });
 
+  router.delete("/:id", [auth], async (req, res) => {
+    try {
+      const course = await Course.findByIdAndDelete(req.params.id);
+      if (!course) return res.status(404).send("Course does not exist...");
+      res.status(200).send();
+    } catch (error) {
+      res.status(400).send(error.message);
+    }
+  });
+
 module.exports = router;
