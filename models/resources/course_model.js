@@ -57,6 +57,7 @@ function validateCourse(req) {
     modules: Joi.array().required(),
     tags: Joi.array(),
     image : Joi.string(),
+    language : Joi.string(),
     createdDate : Joi.date().required(),
     user : Joi.objectId().required(),
   });

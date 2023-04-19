@@ -107,6 +107,7 @@ router.post("/", [auth, guru, validate(validateCourse)], async (req, res) => {
       "image",
       "createdDate",
       "user",
+      "language"
     ])
   );
 
@@ -130,6 +131,7 @@ router.put("/", [auth, guru], async (req, res) => {
         "tags",
         "modules",
         "image",
+        "language"
       ]),
       { new: true, useFindAndModify: false, strict: false }
     );
