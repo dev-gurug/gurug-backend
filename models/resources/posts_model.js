@@ -26,6 +26,10 @@ const PostsSchema = mongoose.Schema({
     type :String
   },
   guruPost: Boolean,
+  language : {
+    type: String,
+    required: true,
+  }
 });
 
 const Posts = mongoose.model("Posts", PostsSchema);
@@ -40,6 +44,7 @@ function validatePost(req) {
     groupId : Joi.string().optional().allow(""),
     guruPost : Joi.boolean(),
     createdDate: Joi.date().required(),
+    language : Joi.string().required()
   });
   return schema.validate(req);
 }

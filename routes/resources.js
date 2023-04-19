@@ -11,6 +11,7 @@ const comment = require("./resources/comment_route");
 const badge = require("./resources/badge_route");
 const userWall = require("./resources/userWall_route");
 const prayer = require("./resources/prayers_route");
+const languages = require("./resources/languages_route");
 
 router.use("/gyan", gyan);
 router.use("/posts", posts);
@@ -23,6 +24,7 @@ router.use("/comments", comment);
 router.use("/badges", badge);
 router.use("/wall", userWall);
 router.use("/prayers", prayer);
+router.use("/languages", languages);
 
 router.get("/ping", async (req, res) => {
   res.send();

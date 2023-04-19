@@ -153,6 +153,7 @@ router.post("/", async (req, res) => {
         "state",
         "password",
         "isGuru",
+        "language"
       ])
     );
   }
@@ -185,6 +186,7 @@ router.post("/", async (req, res) => {
         "phone",
         "password",
         "isUser",
+        "language"
       ])
     );
   }
@@ -224,6 +226,7 @@ router.post("/", async (req, res) => {
           "isAdmin",
           "isUser",
           "isKeyUser",
+          "language"
         ]),
         token,
       });

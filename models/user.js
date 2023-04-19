@@ -73,7 +73,8 @@ const userSchema = mongoose.Schema({
   isGuru: Boolean,
   isSubAdmin: Boolean,
   isKeyUser : Boolean,
-  isUser : Boolean
+  isUser : Boolean,
+  language : String
 });
 
 userSchema.methods.generateAuthToken = function () {
@@ -87,7 +88,8 @@ userSchema.methods.generateAuthToken = function () {
       image : this.image,
       isSubAdmin : this.isSubAdmin, 
       isKeyUser : this.isKeyUser, 
-      isUser : this.isUser
+      isUser : this.isUser,
+      language : this.language
     },
     config.get("jwtPrivateKey")
   );
@@ -117,6 +119,7 @@ function validate(req) {
     isSubAdmin : Joi.boolean(),
     isKeyUser : Joi.boolean(),
     isUser : Joi.boolean(),
+    language : Joi.string().optional().allow("")
   });
   return schema.validate(req);
 }

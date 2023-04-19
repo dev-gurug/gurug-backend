@@ -33,7 +33,7 @@ const { Posts, validatePost } = require("../../models/resources/posts_model");
   });
   
 router.post("/", [auth, validate(validatePost)], async (req, res) => {
-  let posts = Posts(_.pick(req.body, ["title", "tags", "body", "image", "createdDate", "guruPost", "user", "groupId"]));
+  let posts = Posts(_.pick(req.body, ["title", "tags", "body", "image", "createdDate", "guruPost", "user", "groupId", "language"]));
 
   try {
     posts = await posts.save();
