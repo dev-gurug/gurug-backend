@@ -139,6 +139,7 @@ router.post("/", [auth, validate(validateGyan)], async (req, res) => {
       "image",
       "createdDate",
       "disabled",
+      "language",
       "adminId",
     ])
   );

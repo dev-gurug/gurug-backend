@@ -20,6 +20,7 @@ const GroupSchema = mongoose.Schema({
   memberCount: Number,
   usersAssociated: [Object],
   groupManagers: [Object],
+  language : String,
   createdDate: Date
 });
 

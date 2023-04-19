@@ -27,8 +27,7 @@ const PostsSchema = mongoose.Schema({
   },
   guruPost: Boolean,
   language : {
-    type: String,
-    required: true,
+    type: String
   }
 });
 

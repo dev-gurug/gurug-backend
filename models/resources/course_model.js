@@ -43,6 +43,7 @@ const CourseSchema = mongoose.Schema({
     type: Schema.Types.Mixed,
     required: true,
   },
+  language : String
 });
 
 

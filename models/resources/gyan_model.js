@@ -19,6 +19,7 @@ const GyanSchema = mongoose.Schema({
       type : Date,
       required : true
   },
+  language : String,
   adminId : String,
   disabled : Boolean
 });
@@ -35,6 +36,7 @@ function validateGyan(req) {
     mediaType : Joi.string().optional().allow(""),
     adminId : Joi.string().optional().allow(""),
     disabled : Joi.boolean(),
+    language : Joi.string(),
     createdDate : Joi.date().required(),
   });
   return schema.validate(req);
