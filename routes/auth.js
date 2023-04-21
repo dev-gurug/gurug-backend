@@ -35,6 +35,7 @@ router.post("/requestOTP", async (req,res) =>{
     let verification = await sendPhoneVerification(phone);
     res.send(verification);
   } catch (error) {
+    console.log(error)
     res.status(400).send(error.message);
   }
 })
