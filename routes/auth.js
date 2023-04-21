@@ -23,6 +23,7 @@ router.post("/", async (req, res) => {
 });
 
 router.post("/requestOTP", async (req,res) =>{
+  let phone = req.body.phone
   if (!phone) return res.status(404).send("Enter an PhoneNumber...");
   console.log(phone)
   let user = await User.findOne({ phone });
