@@ -13,8 +13,21 @@ const {
   validateCourseProgress,
 } = require("../../models/resources/courseProgress_model");
 
-router.get("/", async (req, res) => {
-  const course = await Course.find();
+const englishId = "6434f70f3d6fb343e525882f";
+const hindiId = "6434f73b3d6fb343e5258830";
+
+router.get("/", [auth],async (req, res) => {
+  let language = req.user.language;
+  let english;
+  if (language === englishId) english = true;
+
+  let course;
+  if(english){
+    course = await Course.find({language : {$ne : hindiId}});
+  }else{
+    course = await Course.find();
+  }
+
   if (!course) return res.status(404).send("Course does not exist...");
   res.send(course);
 });
@@ -26,7 +39,11 @@ router.get("/", async (req, res) => {
 //     res.send(post);
 //   });
 
-router.get("/find", async (req, res) => {
+router.get("/find", [auth], async (req, res) => {
+  let language = req.user.language;
+  let english;
+  if (language === englishId) english = true;
+
   let course;
   if (req.query.search) {
     let tags = req.query.search.split(" ");
@@ -36,9 +53,14 @@ router.get("/find", async (req, res) => {
     query.push({ tags: { $in: tags } });
 
     course = await Course.find({ $or: query });
+    if(english) course = course.filter((c) => c.language !== hindiId)
     if (!course) return res.status(404).send("Course does not exist...");
   } else {
-    course = await Course.find();
+    if(english){
+      course = await Course.find({language : {$ne : hindiId}});
+    }else{
+      course = await Course.find();
+    }
     if (!course) return res.status(404).send("Course does not exist...");
   }
   res.send(course);
@@ -89,7 +111,7 @@ router.post(
   }
 );
 
-router.get("/:id", async (req, res) => {
+router.get("/:id",[auth], async (req, res) => {
   const course = await Course.findById(req.params.id);
   if (!course) return res.status(404).send("Course does not exist...");
   res.send(course);

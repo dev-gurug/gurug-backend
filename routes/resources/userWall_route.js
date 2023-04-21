@@ -9,10 +9,15 @@ const { GPost } = require("../../models/resources/gposts_model");
 const { Group } = require("../../models/resources/group_model");
 const { Gyan } = require("../../models/resources/gyan_model");
 const { Posts } = require("../../models/resources/posts_model");
-const {Followers} = require("../../models/user_actions/followers_model");
+const { Followers } = require("../../models/user_actions/followers_model");
 
 router.get("/myWall", [auth], async (req, res) => {
+  const englishId = "6434f70f3d6fb343e525882f";
+  const hindiId = "6434f73b3d6fb343e5258830";
   let userId = req.user._id;
+  let language = req.query.language;
+  let english;
+  if (language === englishId) english = true;
 
   var cutoff = new Date();
   cutoff.setDate(cutoff.getDate() - 3000);
@@ -28,8 +33,15 @@ router.get("/myWall", [auth], async (req, res) => {
   }
 
   //Gyan
-  let gyan = await Gyan.find({$and: [{disabled : { $ne : true}},three_days_query]});
-  if (!gyan || gyan.length === 0) gyan = await Gyan.find({disabled : { $ne : true}}).limit(2);
+  let gyan = await Gyan.find({
+    $and: [{ disabled: { $ne: true } }, three_days_query],
+  });
+  if (!gyan || gyan.length === 0)
+    gyan = await Gyan.find(
+      english
+        ? { disabled: { $ne: true }, language: { $ne: hindiId } }
+        : { disabled: { $ne: true } }
+    ).limit(2);
   gyan = gyan.map((item) => ({ ...item._doc, dataType: "gyan" }));
   resourses = resourses.concat(gyan);
 
@@ -51,12 +63,16 @@ router.get("/myWall", [auth], async (req, res) => {
   const follows = await Followers.find({
     $and: [{ sourceId: userId }, { targetRole: "guru" }],
   });
-  console.log(follows)
+  console.log(follows);
   if (follows?.length > 0) {
     const gurusFollowed = follows.map((follow) => follow.targetId);
     //courses
     let courses = await Course.find({
-      $and: [{ user: { $in: gurusFollowed } }, three_days_query],
+      $and: [
+        { user: { $in: gurusFollowed } },
+        three_days_query,
+        english && { language: { $ne: hindiId } },
+      ],
     });
     if (courses?.length > 0) {
       courses = courses.map((item) => ({ ...item._doc, dataType: "course" }));
@@ -64,7 +80,11 @@ router.get("/myWall", [auth], async (req, res) => {
     }
     //Posts
     let posts = await Posts.find({
-      $and: [{ user: { $in: gurusFollowed } }, three_days_query],
+      $and: [
+        { user: { $in: gurusFollowed } },
+        three_days_query,
+        english && { language: { $ne: hindiId } },
+      ],
     });
     if (posts?.length > 0) {
       posts = posts.map((item) => ({ ...item._doc, dataType: "post" }));

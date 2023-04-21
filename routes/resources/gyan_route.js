@@ -8,7 +8,14 @@ const { Gyan, validateGyan } = require("../../models/resources/gyan_model");
 const subAdmin = require("../../middleware/subAdmin");
 const adminSubAdmin = require("../../middleware/adminSubAdmin");
 
-router.get("/recommended", async (req, res) => {
+const englishId = "6434f70f3d6fb343e525882f";
+const hindiId = "6434f73b3d6fb343e5258830";
+
+router.get("/recommended",[auth], async (req, res) => {
+  let language = req.user.language;
+  let english;
+  if (language === englishId) english = true;
+
   let gyan;
 
   const getRandom = (array, numberOfItems) => {
@@ -29,6 +36,7 @@ router.get("/recommended", async (req, res) => {
       { tags: { $in: gyan.tags } },
       { disabled: { $ne: true } },
     ];
+    if(english) query.push({ language: { $ne: hindiId } })
     let byTags = await Gyan.find({ $and: query });
     if (!byTags) return [];
     if (byTags.length <= 0) return [];
@@ -43,6 +51,7 @@ router.get("/recommended", async (req, res) => {
       { mediaType: gyan.mediaType },
       { disabled: { $ne: true } },
     ];
+    if(english) query.push({ language: { $ne: hindiId } })
     let byMedia = await Gyan.find({ $and: query });
     if (!byMedia) return [];
     if (byMedia.length <= 0) return [];
@@ -68,7 +77,7 @@ router.get("/recommended", async (req, res) => {
     return res.send([allFound[0], allFound[1], allFound[2]]);
   console.log(3);
 
-  gyan = await Gyan.find({ $and: [query, { disabled: { $ne: true } }] });
+  gyan = await Gyan.find({ $and: [query, { disabled: { $ne: true } }, english && { language: { $ne: hindiId } }] });
   if (!gyan) {
     if (allFound.length === 0)
       return res.status(404).send("Gyan does not exist...");
@@ -121,6 +130,7 @@ router.get("/", async (req, res) => {
     gyan = await Gyan.find();
     if (!gyan) return res.status(404).send("Gyan does not exist...");
   }
+  if(english) gyan = gyan.filter((g) => g.language !== hindiId)
   gyan = gyan.filter((v) => !v.disabled);
   if (gyan.length === 0) return res.status(404).send("Gyan does not exist...");
   res.send(gyan);

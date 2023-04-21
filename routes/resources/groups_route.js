@@ -6,9 +6,21 @@ const auth = require("../../middleware/auth");
 const validate = require("../../middleware/validate");
 const { Group } = require("../../models/resources/group_model");
 
+const englishId = "6434f70f3d6fb343e525882f";
+const hindiId = "6434f73b3d6fb343e5258830";
 
-router.get("/", async (req, res) => {
-  const group = await Group.find();
+router.get("/", [auth],async (req, res) => {
+  let language = req.user.language;
+  let english;
+  if (language === englishId) english = true;
+
+  let group;
+  if(english){
+    group = await Group.find({language : {$ne : hindiId}});
+  }else{
+    group = await Group.find();
+  }
+
   if (!group) return res.status(404).send("Groups does not exist...");
   res.send(group);
 });
@@ -21,12 +33,11 @@ router.get("/user", [auth], async (req, res) => {
 });
 
 
-router.get("/:id", async (req, res) => {
+router.get("/:id",[auth], async (req, res) => {
   const group = await Group.findById(req.params.id);
   if (!group) return res.status(404).send("Group does not exist...");
   res.send(group);
 });
-
 
 
 router.post("/", [auth], async (req, res) => {
@@ -39,7 +50,6 @@ router.post("/", [auth], async (req, res) => {
     res.status(400).send(error.message);
   }
 });
-
 
 
 router.put("/addUser:id", [auth], async (req, res) => {
@@ -59,7 +69,6 @@ router.put("/removeGroupManager:id", [auth], async (req, res) => {
   if (!group) return res.status(404).send("Group does not exist...");
   res.send(group);
 });
-
 
 
 router.put("/addManagers:id", [auth], async (req, res) => {
