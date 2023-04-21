@@ -77,7 +77,13 @@ router.get("/recommended",[auth], async (req, res) => {
     return res.send([allFound[0], allFound[1], allFound[2]]);
   console.log(3);
 
-  gyan = await Gyan.find({ $and: [query, { disabled: { $ne: true } }, english && { language: { $ne: hindiId } }] });
+  let query1 = [
+    query, { disabled: { $ne: true } }
+  ]
+
+  if(english) query1.push({ language: { $ne: hindiId }})
+
+  gyan = await Gyan.find({ $and: [query1] });
   if (!gyan) {
     if (allFound.length === 0)
       return res.status(404).send("Gyan does not exist...");

@@ -67,25 +67,31 @@ router.get("/myWall", [auth], async (req, res) => {
   if (follows?.length > 0) {
     const gurusFollowed = follows.map((follow) => follow.targetId);
     //courses
+    let query1 = [
+      { user: { $in: gurusFollowed } },
+      three_days_query,
+    ]
+    if(english) query1.push({ language: { $ne: hindiId }})
+    
     let courses = await Course.find({
-      $and: [
-        { user: { $in: gurusFollowed } },
-        three_days_query,
-        english && { language: { $ne: hindiId } },
-      ],
+      $and: query1,
     });
+    
     if (courses?.length > 0) {
       courses = courses.map((item) => ({ ...item._doc, dataType: "course" }));
       resourses = resourses.concat(courses);
     }
     //Posts
+    let query = [
+      { user: { $in: gurusFollowed } },
+      three_days_query,
+    ]
+    
+    if(english) query.push({ language: { $ne: hindiId }})
     let posts = await Posts.find({
-      $and: [
-        { user: { $in: gurusFollowed } },
-        three_days_query,
-        english && { language: { $ne: hindiId } },
-      ],
+      $and: query
     });
+
     if (posts?.length > 0) {
       posts = posts.map((item) => ({ ...item._doc, dataType: "post" }));
       resourses = resourses.concat(posts);
