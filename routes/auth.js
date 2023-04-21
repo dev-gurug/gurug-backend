@@ -23,8 +23,6 @@ router.post("/", async (req, res) => {
 });
 
 router.post("/requestOTP", async (req,res) =>{
-  let phone = req.body.phone
-  phone = "+" + phone.trim()
   if (!phone) return res.status(404).send("Enter an PhoneNumber...");
   console.log(phone)
   let user = await User.findOne({ phone });
@@ -46,7 +44,6 @@ router.post("/loginWithOTP", async (req,res) =>{
     try {
       let verification = await verifyPhoneCode(phone, req.body.otp);
       if(verification.status === "approved"){
-        phone = "+" + phone.trim()
         let user = await User.findOne({ phone })
         const token = user.generateAuthToken()
         res.send(token);
