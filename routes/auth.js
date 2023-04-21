@@ -23,7 +23,7 @@ router.post("/", async (req, res) => {
 });
 
 router.post("/requestOTP", async (req,res) =>{
-  let phone = req.query.phone
+  let phone = req.body.phone
   phone = "+" + phone.trim()
   if (!phone) return res.status(404).send("Enter an PhoneNumber...");
   console.log(phone)
