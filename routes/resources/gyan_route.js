@@ -121,7 +121,11 @@ router.get("/:id", async (req, res) => {
   res.send(gyan);
 });
 
-router.get("/", async (req, res) => {
+router.get("/", [auth],async (req, res) => {
+  let language = req.user.language;
+  let english;
+  if (language === englishId && !user.isAdmin) english = true;
+  
   let gyan;
   if (req.query.search) {
     let tags = req.query.search.split(" ");
