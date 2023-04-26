@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 const router = express.Router();
 const Joi = require("joi");
 const auth = require("../middleware/auth");
-const { sendPhoneVerification } = require("../services/twillio");
+const { sendPhoneVerification, verifyPhoneCode } = require("../services/twillio");
 
 router.post("/", async (req, res) => {
   console.log("in login")
