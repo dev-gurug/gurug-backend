@@ -26,12 +26,12 @@ router.post("/requestOTP", async (req,res) =>{
   let phone = req.body.phone
   if (!phone) return res.status(404).send("Enter an PhoneNumber...");
   console.log(phone)
+  try {
   let user = await User.findOne({ phone });
   if (!user) return res
     .status(400)
     .send("Phone Number not found/Registered. Please check Phone Number.");
   console.log(user._id, "User ID")
-  try {
     let verification = await sendPhoneVerification(phone);
     res.send(verification);
   } catch (error) {
