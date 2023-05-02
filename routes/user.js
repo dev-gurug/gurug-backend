@@ -133,11 +133,12 @@ router.post("/", async (req, res) => {
   const { error } = UserValidation(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  let user = await User.findOne({ email: req.body.email });
+  let user = await User.findOne({ phone: req.body.phone });
+  
   if (user)
     return res
       .status(400)
-      .send("Email already registered. Please Use another email.");
+      .send("Phone already registered. Please Use another Phone no.");
 
   if (req.body.isGuru) {
     // user = User(_.pick(req.body, ["firstName", "lastName", "email", "password", "isGuru", "isSubAdmin", "isAdmin"]));
