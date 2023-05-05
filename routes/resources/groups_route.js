@@ -84,10 +84,13 @@ router.put("/addManagers:id", [auth], async (req, res) => {
 });
 
 router.delete("/:id", [auth], async (req, res) => {
-  console.log(req.params.id);
-  const event = await Group.findByIdAndDelete(req.params.id, { new: false, useFindAndModify: false, strict: false });
-  if (!event) return res.status(404).send("Group does not exist...");
-  res.send(event);
+  try {
+    const event = await Group.findByIdAndDelete(req.params.id, { new: false, useFindAndModify: false, strict: false });
+    if (!event) return res.status(404).send("Group does not exist...");
+    res.send(event);
+  } catch (error) {
+    return res.status(404).send("Group does not exist...");
+  }
 });
 
 module.exports = router;
