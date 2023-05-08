@@ -8,14 +8,14 @@ const validate = require("../../middleware/validate");
 const { Prayer, validatePost } = require("../../models/resources/prayer_model");
 
 
-router.get("/", async (req, res) => {
+router.get("/",[auth], async (req, res) => {
     const prayer = await Prayer.find();
     if (!prayer) return res.status(404).send("Post does not exist...");
     res.send(prayer);
 });
 
 
-router.get("/:id", async (req, res) => {
+router.get("/:id",[auth], async (req, res) => {
     const prayer = await Prayer.findById(req.params.id);
     if (!prayer) return res.status(404).send("Post does not exist...");
     res.send(prayer);
@@ -23,7 +23,7 @@ router.get("/:id", async (req, res) => {
 
 
 
-router.get("/userID/:user", async (req, res) => {
+router.get("/userID/:user",[auth], async (req, res) => {
     try {
         console.log(req.params, "params")
         const prayer = await Prayer.find({ user: req.params.user });
