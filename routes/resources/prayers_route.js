@@ -6,6 +6,7 @@ const auth = require("../../middleware/auth");
 // const guru = require("../../middleware/guru");
 const validate = require("../../middleware/validate");
 const { Prayer, validatePost } = require("../../models/resources/prayer_model");
+const admin = require("../../middleware/admin");
 
 
 router.get("/",[auth], async (req, res) => {
@@ -57,7 +58,15 @@ router.post("/incrementPrayerCount", [auth], async (req, res) => {
     res.send(prayer);
 });
 
-
+router.delete("/:id", [auth, admin], async (req, res) => {
+    try {
+      const prayer = await Prayer.findByIdAndDelete(req.params.id);
+      if (!prayer) return res.status(404).send("Prayer does not exist...");
+      res.status(200).send();
+    } catch (error) {
+      res.status(400).send(error.message);
+    }
+  });
 
 module.exports = router;
 
