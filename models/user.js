@@ -74,7 +74,8 @@ const userSchema = mongoose.Schema({
   isSubAdmin: Boolean,
   isKeyUser : Boolean,
   isUser : Boolean,
-  language : String
+  language : String,
+  disabled :Boolean
 });
 
 userSchema.methods.generateAuthToken = function () {
@@ -120,7 +121,8 @@ function validate(req) {
     isSubAdmin : Joi.boolean(),
     isKeyUser : Joi.boolean(),
     isUser : Joi.boolean(),
-    language : Joi.string().optional().allow("")
+    language : Joi.string().optional().allow(""),
+    disabled : Joi.boolean()
   });
   return schema.validate(req);
 }
