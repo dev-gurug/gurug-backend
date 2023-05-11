@@ -89,7 +89,8 @@ userSchema.methods.generateAuthToken = function () {
       isSubAdmin : this.isSubAdmin, 
       isKeyUser : this.isKeyUser, 
       isUser : this.isUser,
-      language : this.language
+      language : this.language,
+      disabled : this.disabled
     },
     config.get("jwtPrivateKey")
   );
