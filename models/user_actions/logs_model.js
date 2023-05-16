@@ -5,7 +5,7 @@ const LogsSchema = mongoose.Schema({
   action: {
     type: String,
   },
-  data: {
+  body: {
     type: Object,
   },
   endpoint: {
@@ -24,7 +24,7 @@ const Logs = mongoose.model("Logs", LogsSchema);
 function validateLog(req) {
   const schema = Joi.object({
     action: Joi.string().optional(),
-    data: Joi.object().optional(),
+    body: Joi.object().optional(),
     endpoint: Joi.string().optional(),
     origin: Joi.string().optional(),
     createdDate: Joi.date().optional(),
