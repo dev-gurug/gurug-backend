@@ -5,6 +5,7 @@ const router = express.Router();
 const Joi = require("joi");
 const auth = require("../middleware/auth");
 const { sendPhoneVerification, verifyPhoneCode } = require("../services/twillio");
+const { Logs } = require("../models/user_actions/logs_model");
 
 router.post("/", async (req, res) => {
   console.log("in login")
@@ -23,6 +24,22 @@ router.post("/", async (req, res) => {
 });
 
 router.post("/requestOTP", async (req,res) =>{
+
+  let log = {
+    action: "Send OTP to Login",
+    endpoint: "/requestOTP",
+    body: req.body,
+    origin: req.get("host"),
+    createdDate: new Date(),
+  };
+
+  log = Logs(log);
+  try {
+    log = await log.save();
+  } catch (err) {
+    console.log(err);
+  }
+
   let phone = req.body.phone
   if (!phone) return res.status(404).send("Enter an PhoneNumber...");
   console.log(phone)
