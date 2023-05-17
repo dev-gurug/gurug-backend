@@ -20,7 +20,7 @@ router.get("/myWall", [auth], async (req, res) => {
   if (language === englishId) english = true;
 
   var cutoff = new Date();
-  cutoff.setDate(cutoff.getDate() - 3000);
+  cutoff.setDate(cutoff.getDate() - 7);
 
   const three_days_query = { createdDate: { $gt: cutoff } };
   let resourses = [];
@@ -41,7 +41,7 @@ router.get("/myWall", [auth], async (req, res) => {
       english
         ? { disabled: { $ne: true }, language: { $ne: hindiId } }
         : { disabled: { $ne: true } }
-    ).limit(2);
+    ).limit(2)
   gyan = gyan.map((item) => ({ ...item._doc, dataType: "gyan" }));
   resourses = resourses.concat(gyan);
 
