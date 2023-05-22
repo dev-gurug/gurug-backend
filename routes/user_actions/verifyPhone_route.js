@@ -23,9 +23,10 @@ router.post("/getPhoneCode", async (req, res) => {
     action: "Send OTP to phone",
     endpoint: "/getPhoneCode",
     body: req.body,
-    origin: req.get("host"),
+    origin: req.get('origin'),
     createdDate: new Date(),
   };
+  console.log(req.get('origin'))
   log = Logs(log);
   try {
     log = await log.save();
