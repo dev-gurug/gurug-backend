@@ -9,8 +9,7 @@ const cors = require("cors");
 
 module.exports = function(app) {
   //----------------------Setting route handlers--------------------------
-  // app.use(cors({ origin: "https://www.guru-g.app" }));
-  app.use(cors());
+  app.use(cors({ origin: "https://www.guru-g.app" }));
   app.use(express.json());
   app.use("/api/users", users);
   app.use("/api/auth", auth);

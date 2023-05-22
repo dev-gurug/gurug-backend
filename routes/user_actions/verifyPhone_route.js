@@ -36,7 +36,7 @@ router.post("/getPhoneCode", async (req, res) => {
   if (!req.body.phone) return res.status(404).send("Provide Phone...");
   try {
     let verification = await sendPhoneVerification(req.body.phone);
-    res.send(verification);
+    res.send({sent :true});
   } catch (error) {
     res.status(400).send(error.message);
   }
