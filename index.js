@@ -6,7 +6,7 @@ const app = express();
 
 // Configure the cors middleware
 const corsOptions = {
-  origin: '*', // Allow all origins
+  origin: 'https://www.guru-g.app', // Allow all origins
   credentials: true, // Allow credentials (cookies, etc.)
 };
 
