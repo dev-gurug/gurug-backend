@@ -12,7 +12,7 @@ const LogsSchema = mongoose.Schema({
     type: String,
   },
   origin: {
-    type: String,
+    type: Object,
   },
   createdDate: {
     type: Date,

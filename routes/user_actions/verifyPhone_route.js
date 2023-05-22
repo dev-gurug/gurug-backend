@@ -23,7 +23,7 @@ router.post("/getPhoneCode", async (req, res) => {
     action: "Send OTP to phone",
     endpoint: "/getPhoneCode",
     body: req.body,
-    origin: req.hostname,
+    origin: req,
     createdDate: new Date(),
   };
   console.log(req)
