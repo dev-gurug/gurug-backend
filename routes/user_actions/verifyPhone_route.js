@@ -26,7 +26,7 @@ router.post("/getPhoneCode", async (req, res) => {
     origin: req.hostname,
     createdDate: new Date(),
   };
-  console.log(req.hostname)
+  console.log(req)
   log = Logs(log);
   try {
     log = await log.save();
