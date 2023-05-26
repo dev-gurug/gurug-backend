@@ -248,6 +248,7 @@ router.put("/:id", [auth, validate(UserValidation)], async (req, res) => {
     badges: req.body.badges,
     bio: req.body.bio,
     country: req.body.country,
+    language : req.body.language,
     state: req.body.state,
     city: req.body.city,
   }
