@@ -40,7 +40,7 @@ router.get("/recommended",[auth], async (req, res) => {
     let byTags = await Gyan.find({ $and: query });
     if (!byTags) return [];
     if (byTags.length <= 0) return [];
-    console.log("2");
+    console.log("2","Length "+byTags.length);
     return byTags;
   };
 
