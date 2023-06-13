@@ -18,6 +18,20 @@ router.get("/recommended",[auth], async (req, res) => {
 
   let gyan;
 
+  function getRandomItems(array, count) {
+    const copyArray = array.slice();
+    const randomItems = []
+    while (randomItems.length < count && copyArray.length > 0) {
+      const randomIndex = Math.floor(Math.random() * copyArray.length);
+      const selectedItem = copyArray.splice(randomIndex, 1)[0];
+      const isDuplicate = randomItems.some(item => item._id === selectedItem._id);
+      if (!isDuplicate) {
+        randomItems.push(selectedItem);
+      }
+    }
+    return randomItems;
+  }
+
   const getRandom = (array, numberOfItems) => {
     let returnArray = [];
     const getIndex = (reducedArray) => {
@@ -69,12 +83,12 @@ router.get("/recommended",[auth], async (req, res) => {
   }
 
   let byTags = await getByTags(currentGyan);
-  if (byTags.length >= 3) return res.send([byTags[0], byTags[1], byTags[2]]);
+  if (byTags.length >= 3) return res.send(getRandomItems(byTags, 3));
   console.log(1);
   let byMedia = await getByMedia(currentGyan);
   allFound = [...byTags, ...byMedia];
   if (allFound.length >= 3)
-    return res.send([allFound[0], allFound[1], allFound[2]]);
+    return res.send(getRandomItems(allFound, 3));
   console.log(3);
 
   let query1 = [
@@ -94,7 +108,7 @@ router.get("/recommended",[auth], async (req, res) => {
   allFound = [...allFound, ...recommended];
   if (allFound.length < 3) return res.send(allFound);
   console.log(5);
-  return res.send([allFound[0], allFound[1], allFound[2]]);
+  return res.send(getRandomItems(allFound, 3));
 });
 
 router.get("/pending", [auth, subAdmin], async (req, res) => {
