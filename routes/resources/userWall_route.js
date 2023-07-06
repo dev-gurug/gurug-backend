@@ -20,7 +20,7 @@ router.get("/myWall", [auth], async (req, res) => {
   if (language === englishId) english = true;
 
   var cutoff = new Date();
-  cutoff.setDate(cutoff.getDate() - 7);
+  cutoff.setDate(cutoff.getDate() - 30);
 
   const three_days_query = { createdDate: { $gt: cutoff } };
   let resourses = [];
