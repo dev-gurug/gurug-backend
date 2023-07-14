@@ -23,7 +23,8 @@ router.get("/", [auth],async (req, res) => {
 
   let course;
   if(english){
-    course = await Course.find({language : {$ne : hindiId}});
+    if(language) course = await Course.find({language : {$ne : hindiId}});
+    else course = await Course.find();
   }else{
     course = await Course.find();
   }
