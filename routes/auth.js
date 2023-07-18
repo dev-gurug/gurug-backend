@@ -63,7 +63,7 @@ router.post("/loginWithOTP", async (req,res) =>{
     try {
       let verification = await verifyPhoneCode(phone, req.body.otp);
       if(verification.status === "approved"){
-        let user = await User.findOne({ phone })
+        let user = await User.findOne({ phone }).select("-password")
         let log = {
           action: "Login with OTP",
           endpoint: "/loginWithOTP",
