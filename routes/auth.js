@@ -64,6 +64,19 @@ router.post("/loginWithOTP", async (req,res) =>{
       let verification = await verifyPhoneCode(phone, req.body.otp);
       if(verification.status === "approved"){
         let user = await User.findOne({ phone })
+        let log = {
+          action: "Login with OTP",
+          endpoint: "/loginWithOTP",
+          body: user,
+          origin: req.get("host"),
+          createdDate: new Date(),
+        };
+        log = Logs(log);
+        try {
+          log = await log.save();
+        } catch (err) {
+          console.log(err);
+        }
         const token = user.generateAuthToken()
         res.send(token);
       }else{
