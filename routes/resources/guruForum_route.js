@@ -69,11 +69,33 @@ router.post("/:id", [auth, validate(validateGuruForumPost)], async (req, res) =>
     }
 });
 
+router.put("/post",[auth], async (req, res) => {
+    
+    const postId = req.body._id
+    const userId = req.user._id
+    
+    let post = await GuruForumPost.findById(postId);
+    if (!post) return res.status(404).send("Forum Post does not exist...");
+    if(post.user !== userId) return res.status(401).send("You do not have permission to delete.");
+
+    let postupdate = {
+        body : req.body.body,
+        title : req.body.title
+    }
+
+    try{
+        post = await GuruForumPost.findByIdAndUpdate(postId, postupdate, {new : true})
+        res.send(post)
+    } catch (error) {
+        res.status(400).send(error.message);
+    }
+});
+
 router.put("/post/incrementViews/:id",[auth], async (req, res) => {
     // console.log(req.user._id)
     let post = await GuruForumPost.findById(req.params.id);
     if (!post) return res.status(404).send("Forum Post does not exist...");
-
+    
     try{
         post = await GuruForumPost.findByIdAndUpdate(post._id, {$set: {views : post.views+1}}, {new : true})
         res.send(post)
@@ -120,6 +142,7 @@ router.put("/post/toggleLike",[auth], async (req, res) => {
         res.status(400).send(error.message);
     }
 });
+
 
 router.delete("/post/:id", [auth] , async (req, res) => {
     let post = await GuruForumPost.findById(req.params.id);
