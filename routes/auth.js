@@ -61,6 +61,7 @@ router.post("/loginWithOTP", async (req,res) =>{
   let phone = req.body.phone
 
   let sendUser = async () =>{
+    try{
     let user = await User.findOne({ phone }).select("-password")
         let log = {
           action: "Login with OTP",
@@ -77,6 +78,9 @@ router.post("/loginWithOTP", async (req,res) =>{
         }
         const token = user.generateAuthToken()
         res.send(token);
+      } catch (error) {
+        res.status(400).send(error.message);
+      }
   }
   
   try {
