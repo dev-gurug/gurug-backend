@@ -21,20 +21,22 @@ router.get("/myWall", [auth], async (req, res) => {
 
   var cutoff = new Date();
   cutoff.setDate(cutoff.getDate() - 10);
-
+  
   const three_days_query = { createdDate: { $gt: cutoff } };
   let resourses = [];
-
+  
   //Events
   let events = await Events.find(three_days_query);
   if (events?.length > 0) {
     events = events.map((item) => ({ ...item._doc, dataType: "event" }));
     resourses = resourses.concat(events);
   }
-
+  
+  var Gcutoff = new Date();
+  Gcutoff.setDate(Gcutoff.getDate() - 30);
   //Gyan
   let gyan = await Gyan.find({
-    $and: [{ disabled: { $ne: true } }],
+    $and: [{ disabled: { $ne: true } }, { createdDate: { $gt: Gcutoff } }],
   }).limit(20);
   if (!gyan || gyan.length === 0)
     gyan = await Gyan.find(
