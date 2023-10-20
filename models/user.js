@@ -21,8 +21,6 @@ const userSchema = mongoose.Schema({
   },
   email: {
     type: String,
-    minlength: 5,
-    maxlength: 255,
   },
   phone : {
     type: String,
@@ -101,7 +99,7 @@ function validate(req) {
   const schema = Joi.object({
     firstName: Joi.string().required().max(50).min(3),
     lastName: Joi.string().required().max(50).min(3),
-    email: Joi.string().max(255).email().min(5).optional().allow(""),
+    email: Joi.string().email().optional().allow(""),
     dob: Joi.date().optional().allow(""),
     phone: Joi.string().max(50).min(5).optional().allow(""),
     ministryInfo : Joi.string().max(1000).optional().allow(""),
