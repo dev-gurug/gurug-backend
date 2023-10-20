@@ -66,12 +66,6 @@ const userSchema = mongoose.Schema({
   image : {
     type: String,
   },
-  password: {
-    type: String,
-    required: true,
-    minlength: 5,
-    maxlength: 1024,
-  },
   isAdmin: Boolean,
   isGuru: Boolean,
   isSubAdmin: Boolean,
@@ -120,7 +114,6 @@ function validate(req) {
     city : Joi.string().max(255).min(3).optional().allow(""),
     zip : Joi.string().max(255).min(2).optional().allow(""),
     image : Joi.string().optional().allow(""),
-    password: Joi.string().required().max(255),
     isGuru : Joi.boolean(),
     isAdmin : Joi.boolean(),
     isSubAdmin : Joi.boolean(),

@@ -170,7 +170,6 @@ router.post("/", async (req, res) => {
         "bio",
         "country",
         "state",
-        "password",
         "isGuru",
         "language",
       ])
@@ -189,7 +188,6 @@ router.post("/", async (req, res) => {
         "bio",
         "country",
         "state",
-        "password",
         "isSubAdmin",
       ])
     );
@@ -204,7 +202,6 @@ router.post("/", async (req, res) => {
         "email",
         "dob",
         "phone",
-        "password",
         "isUser",
         "language",
       ])
@@ -220,15 +217,14 @@ router.post("/", async (req, res) => {
         "lastName",
         "email",
         "phone",
-        "password",
         "isKeyUser",
       ])
     );
   }
 
-  const salt = await bcrypt.genSalt(10);
-  console.log(user);
-  user.password = await bcrypt.hash(user.password, salt);
+  // const salt = await bcrypt.genSalt(10);
+  // console.log(user);
+  // user.password = await bcrypt.hash(user.password, salt);
 
   try {
     await user.save();
