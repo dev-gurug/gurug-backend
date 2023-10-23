@@ -184,10 +184,6 @@ router.post("/", async (req, res) => {
         "lastName",
         "email",
         "phone",
-        "ministryInfo",
-        "bio",
-        "country",
-        "state",
         "isSubAdmin",
       ])
     );
@@ -260,6 +256,7 @@ router.put("/:id", [auth, validate(UserValidation)], async (req, res) => {
   if (req.body.ministryInfo !== undefined)
     body.ministryInfo = req.body.ministryInfo;
   if (req.body.tags !== undefined) body.tags = req.body.tags;
+  if (req.body.email !== undefined) body.email = req.body.email;
   if (req.body.badges !== undefined) body.badges = req.body.badges;
   if (req.body.bio !== undefined) body.bio = req.body.bio;
   if (req.body.country !== undefined) body.country = req.body.country;
