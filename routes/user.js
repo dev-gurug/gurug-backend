@@ -11,6 +11,27 @@ const {
   verifyPhoneCode,
 } = require("../services/twillio");
 
+router.get("/getAllTypes", async (req, res) => {
+  let users = await User.find();
+  let data = {
+    gurus : 0,
+    users : 0,
+    subAdmins : 0,
+    admins : 0,
+    total : users.length
+  }
+
+  users.forEach((u) =>{
+    if(u.isUser) data.users = data.users + 1
+    if(u.isGuru) data.gurus = data.gurus + 1
+    if(u.isSubAdmin) data.subAdmins = data.subAdmins + 1
+    if(u.isAdmin) data.admins = data.admins + 1
+  })
+
+  res.send(data);
+})
+
+
 router.get("/me", auth, async (req, res) => {
   const user = await User.findById(req.user._id).select("-password");
   if (user.badges) {
