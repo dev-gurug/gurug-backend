@@ -37,7 +37,7 @@ router.get("/myWall", [auth], async (req, res) => {
   //Gyan
   let gyan = await Gyan.find({
     $and: [{ disabled: { $ne: true } }, { createdDate: { $gt: Gcutoff } }],
-  }).limit(20);
+  }).limit(20).sort({createdDate : -1});
   if (!gyan || gyan.length === 0)
     gyan = await Gyan.find(
       english
