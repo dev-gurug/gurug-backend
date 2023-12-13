@@ -3,10 +3,6 @@ const express = require("express");
 const cors = require('cors');
 const mongoose = require("mongoose");
 const app = express();
-import rg4js from 'raygun4js';
-
-rg4js('apiKey', 'waYTuPj7MgJS358K1XyFA');
-rg4js('enableCrashReporting', true);
 
 // Configure the cors middleware
 const corsOptions = {
