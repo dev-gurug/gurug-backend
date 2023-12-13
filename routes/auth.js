@@ -104,8 +104,11 @@ router.post("/loginWithOTP", async (req,res) =>{
 
 router.post("/tokenRefresh",[auth], async (req,res) =>{
   const user = await User.findById(req.user._id).select("-password");
-  const token = user.generateAuthToken();
-  res.send(token);
+  if(user){
+    const token = user.generateAuthToken();
+    return res.send(token);
+  }
+  res.send();
 })
 
 async function validate(req) {
